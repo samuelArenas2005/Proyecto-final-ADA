@@ -52,3 +52,72 @@ class Team():
     
     def get_ordered_list_ids(self):
         return self.ordered_ids
+    
+
+
+    #Funciones Danicol
+    
+    def cal_max_performance(self):
+        if self.rbTree.root is None:
+            return None
+        max_node = RBTree.TREE_MAXIMUM(self.rbTree.root)
+        return max_node.sportsMan
+    
+    def cal_min_performance(self):
+        if self.rbTree.root is None:
+            return None
+        max_node = RBTree.TREE_MINIMUM(self.rbTree.root)
+        return max_node.sportsMan
+    
+    def cal_youngest_player(self):
+        if self.rbTree.root is None:
+            return None
+        
+        youngest_player = None
+
+        def inorder_traversal(node):
+            nonlocal youngest_player
+            if node is not None:
+                inorder_traversal(node.left)
+                # Comparar edades
+                if youngest_player is None or node.sportsMan.age < youngest_player.age:
+                    youngest_player = node.sportsMan
+                inorder_traversal(node.right)
+        
+        inorder_traversal(self.rbTree.root)
+        return youngest_player    
+
+    def cal_most_veteran_player(self):
+        if self.rbTree.root is None:
+            return None
+        
+        veteran_player = None
+
+        def inorder_traversal(node):
+            nonlocal veteran_player
+            if node is not None:
+                inorder_traversal(node.left)
+                # Comparar edades
+                if veteran_player is None or node.sportsMan.age > veteran_player.age:
+                    veteran_player = node.sportsMan
+                inorder_traversal(node.right)
+        
+        inorder_traversal(self.rbTree.root)
+        return veteran_player   
+
+    def cal_average_age(self):
+
+        
+        acum_age= 0
+
+        def inorder_traversal(node):
+            nonlocal acum_age
+            if node is not None:
+                inorder_traversal(node.left)
+                acum_age += node.sportsMan.age
+                inorder_traversal(node.right)
+        
+        inorder_traversal(self.rbTree.root)
+        return acum_age/self.rbTree.size if self.rbTree.size > 0 else 0
+    
+    
