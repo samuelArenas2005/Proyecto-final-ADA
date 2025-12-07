@@ -1,5 +1,5 @@
-from RBTree import RBTree, Node, RB_INSERT, print_tree
-from modelos import sportsMan
+from RBTree import RBTree, Node, RB_INSERT, PRINT_TREE
+from SportsMan import SportsMan
 
 # Crear árbol vacío
 tree = RBTree(root=None)
@@ -11,30 +11,20 @@ print("Insertando valores:", valores)
 print("\n" + "="*50 + "\n")
 
 for i, val in enumerate(valores):
-    deportista = sportsMan()
-    deportista.id = val
-    deportista.name = f"Atleta {val}"
-    deportista.age = 20 + i
-    deportista.performance = val * 10
-    
     nodo = Node(
         value=val,
-        sportsMan=deportista,
-        isBlack=True,
-        left=None,
-        right=None,
-        parent=None
+        sportsMan=SportsMan(id=val, name=f"Atleta {val}", age=20 + i, performance=val * 10)
     )
     
     RB_INSERT(tree, nodo)
     
     print(f"Después de insertar {val}:")
     if tree.root:
-        print_tree(tree.root)
+        PRINT_TREE(tree.root)
     print("\n" + "-"*50 + "\n")
 
 print("Árbol final:")
 if tree.root:
-    print_tree(tree.root)
+    PRINT_TREE(tree.root)
 else:
     print("Árbol vacío")

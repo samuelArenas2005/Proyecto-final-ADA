@@ -1,21 +1,26 @@
 from dataclasses import dataclass
 from typing import Optional
-from modelos import sportsMan
+from SportsMan import SportsMan
 
+"""Implementación de un Árbol Rojinegro (Red-Black Tree)"""
+
+#Implementa la estructura de un nodo del árbol rojinegro
 @dataclass
 class Node:
     value: int
-    sportsMan: sportsMan #Modificacion
-    isBlack: bool
-    left: Optional["Node"]
-    right: Optional["Node"]
-    parent: Optional["Node"]
+    sportsMan: SportsMan #Modificacion
+    isBlack: bool = False
+    left: Optional["Node"] = None
+    right: Optional["Node"] = None
+    parent: Optional["Node"] = None
 
+#Implementa la estructura del árbol rojinegro
 @dataclass
 class RBTree:
     root: Optional[Node]
     size: int = 0
 
+#Implementa la rotación izquierda en el árbol rojinegro
 def LEFT_ROTATE(T: RBTree, x: Node):
     y = x.right
     x.right = y.left
@@ -31,6 +36,7 @@ def LEFT_ROTATE(T: RBTree, x: Node):
     y.left = x
     x.parent = y
 
+#Implementa la rotación derecha en el árbol rojinegro
 def RIGHT_ROTATE(T: RBTree, x: Node):
     y = x.left
     x.left = y.right
@@ -46,6 +52,7 @@ def RIGHT_ROTATE(T: RBTree, x: Node):
     y.right = x
     x.parent = y
 
+#Implementa la inserción de un nodo en el árbol rojinegro
 def TREE_INSERT(T: RBTree, x: Node):
     y = None
     z = T.root
@@ -63,6 +70,7 @@ def TREE_INSERT(T: RBTree, x: Node):
     else:
         y.right = x
 
+#Implementa la función de inserción en el árbol rojinegro con balanceo
 def RB_INSERT(T: RBTree, x: Node):
     TREE_INSERT(T, x)
     T.size += 1  # Incrementar el tamaño del árbol
@@ -104,7 +112,8 @@ def RB_INSERT(T: RBTree, x: Node):
                 LEFT_ROTATE(T, x.parent.parent)
     T.root.isBlack = True  # color[root[T]] <- BLACK
 
-def print_tree(node: Node, prefix: str = "", is_tail: bool = True):
+#Implementa la función para imprimir el árbol rojinegro
+def PRINT_TREE(node: Node, prefix: str = "", is_tail: bool = True):
     """Imprime el árbol rojinegro en consola"""
     if node is None:
         # Mostrar hojas NIL en negro
@@ -117,5 +126,17 @@ def print_tree(node: Node, prefix: str = "", is_tail: bool = True):
     
     # Mostrar siempre ambos hijos (izquierdo y derecho)
     extension = "    " if is_tail else "│   "
-    print_tree(node.left, prefix + extension, False)
-    print_tree(node.right, prefix + extension, True)
+    PRINT_TREE(node.left, prefix + extension, False)
+    PRINT_TREE(node.right, prefix + extension, True)
+
+#Implementa la función para encontrar el nodo con el valor máximo en el árbol rojinegro
+def TREE_MAXIMUM(node: Node) -> Node:
+    while node.right is not None:
+        node = node.right
+    return node
+
+#Implementa la función para encontrar el nodo con el valor mínimo en el árbol rojinegro
+def TREE_MINIMUM(node: Node) -> Node:
+    while node.left is not None:
+        node = node.left
+    return node
