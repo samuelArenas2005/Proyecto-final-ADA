@@ -90,18 +90,32 @@ def MERGE(left: Node, right: Node) -> Node:
     
     result = None
     
-    if left.key <= right.key:
+    if left.key < right.key:
         result = left
         result.next = MERGE(left.next, right)
         if result.next is not None:
             result.next.prev = result
         result.prev = None
-    else:
+    elif left.key > right.key:
         result = right
         result.next = MERGE(left, right.next)
         if result.next is not None:
             result.next.prev = result
         result.prev = None
+    else:  # left.key == right.key
+        # Si las llaves son iguales, comparar por número de jugadores
+        if left.data.get_number_of_sportsmen() >= right.data.get_number_of_sportsmen():
+            result = left
+            result.next = MERGE(left.next, right)
+            if result.next is not None:
+                result.next.prev = result
+            result.prev = None
+        else:
+            result = right
+            result.next = MERGE(left, right.next)
+            if result.next is not None:
+                result.next.prev = result
+            result.prev = None
     
     return result
 

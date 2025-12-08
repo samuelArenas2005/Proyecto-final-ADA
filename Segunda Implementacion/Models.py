@@ -47,6 +47,9 @@ class Team():
         inorder_traversal(self.rbTree.root)
         self.ordered_ids = ordered_ids
     
+    def get_number_of_sportsmen(self):
+        return self.rbTree.size
+    
     def get_average_performance(self):
         return self.average_performance
     
@@ -121,16 +124,18 @@ class Team():
     
 
 class Site():
-    def __init__(self, name, teams = LinkedList.LinkedList(), average_performance = 0):
+    def __init__(self, name, teams = LinkedList.LinkedList(), average_performance = 0, total_sportsmen = 0):
         self.name = name
         self.teams = teams
         self.average_performance = average_performance
+        self.total_sportsmen = total_sportsmen
     
     def insert_teams(self, teams):
         for team in teams:
             node = LinkedList.Node(key=team.average_performance, data=team)
             LinkedList.LIST_INSERT(self.teams, node)
         self.order_teams_by_performance()
+        self.cal_number_of_sportsmen()
     
     def order_teams_by_performance(self):
         LinkedList.LIST_MERGE_SORT(self.teams)
@@ -150,6 +155,19 @@ class Site():
     
     def get_average_performance(self):
         return self.average_performance
+
+    def cal_number_of_sportsmen(self):
+        total_sportsmen = 0
+
+        current = self.teams.head
+        while current is not None:
+            total_sportsmen += current.data.get_number_of_sportsmen()
+            current = current.next
+        
+        self.total_sportsmen = total_sportsmen
+    
+    def get_number_of_sportsmen(self):
+        return self.total_sportsmen
     
     def get_worst_team(self):
         if self.teams.tail is not None:
