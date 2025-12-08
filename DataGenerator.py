@@ -33,29 +33,27 @@ DEPORTES = [
     "Escalada", "Surf", "Snowboard", "Esquí"
 ]
 
-def generar_casos_prueba(min_jugadores_por_equipo, max_jugadores_por_equipo, max_equipos_por_sede, max_sedes):
+def generar_casos_prueba(min_jugadores_por_equipo, max_jugadores_por_equipo, num_equipos, num_sedes):
     """
     Genera casos de prueba aleatorios para el proyecto.
     
     Args:
         min_jugadores_por_equipo: Cantidad mínima de jugadores por equipo
         max_jugadores_por_equipo: Cantidad máxima de jugadores por equipo
-        max_equipos_por_sede: Cantidad máxima de equipos por sede
-        max_sedes: Cantidad máxima de sedes
+        num_equipos: Cantidad fija de equipos por sede
+        num_sedes: Cantidad fija de sedes
     
     Returns:
         tuple: (lista_sedes, lista_equipos, lista_deportistas)
     """
     
-    # 1. Generar sedes
-    num_sedes = random.randint(1, max_sedes)
+    # 1. Generar sedes (cantidad fija)
     lista_sedes = [f"Sede {i+1}" for i in range(num_sedes)]
     
     print(f"Generadas {num_sedes} sedes")
     
-    # 2. Generar equipos
-    num_equipos = random.randint(1, num_sedes * max_equipos_por_sede)
-    lista_equipos = []
+    # 2. Generar equipos base (cantidad fija, se replicarán en todas las sedes)
+    equipos_base = []
     deportes_usados = {}  # Para controlar las repeticiones
     
     for i in range(num_equipos):
@@ -69,20 +67,27 @@ def generar_casos_prueba(min_jugadores_por_equipo, max_jugadores_por_equipo, max
             deportes_usados[deporte] = 1
             nombre_equipo = deporte
         
-        lista_equipos.append(nombre_equipo)
+        equipos_base.append(nombre_equipo)
     
-    print(f"Generados {num_equipos} equipos")
+    # Crear lista completa de equipos: cada equipo base existe en cada sede
+    lista_equipos = []
+    for sede in lista_sedes:
+        for equipo_base in equipos_base:
+            lista_equipos.append(f"{equipo_base} - {sede}")
+    
+    print(f"Generados {num_equipos} tipos de equipos base")
+    print(f"Total de equipos (replicados en {num_sedes} sedes): {len(lista_equipos)} equipos")
     
     # 3. Generar deportistas
     lista_deportistas = []
     id_counter = 1
     
-    for equipo in lista_equipos:
+    for equipo_completo in lista_equipos:
+        # Extraer la sede del nombre del equipo
+        equipo_base, sede_equipo = equipo_completo.rsplit(" - ", 1)
+        
         # Cantidad aleatoria de jugadores para este equipo
         num_jugadores = random.randint(min_jugadores_por_equipo, max_jugadores_por_equipo)
-        
-        # Asignar una sede aleatoria al equipo
-        sede_equipo = random.choice(lista_sedes)
         
         for j in range(num_jugadores):
             # Generar 2 nombres y 2 apellidos únicos
@@ -96,7 +101,7 @@ def generar_casos_prueba(min_jugadores_por_equipo, max_jugadores_por_equipo, max
                 "nombre": nombre_completo,
                 "edad": random.randint(8, 100),
                 "rendimiento": random.randint(1, 100),
-                "equipo": equipo,
+                "equipo": equipo_base,  # Solo el nombre base del equipo
                 "sede": sede_equipo
             }
             
@@ -119,8 +124,11 @@ def imprimir_resumen(lista_sedes, lista_equipos, lista_deportistas):
         print(f"  - {sede}")
     
     print(f"\n🏆 EQUIPOS ({len(lista_equipos)}):")
-    for equipo in lista_equipos:
+    print("  (Formato: Equipo - Sede)")
+    for equipo in lista_equipos[:10]:  # Mostrar solo los primeros 10
         print(f"  - {equipo}")
+    if len(lista_equipos) > 10:
+        print(f"  ... y {len(lista_equipos) - 10} más")
     
     print(f"\n👤 DEPORTISTAS ({len(lista_deportistas)}):")
     print("  Primeros 5 deportistas:")
@@ -145,22 +153,22 @@ if True:
     # Configuración
     MIN_JUGADORES_POR_EQUIPO = 5
     MAX_JUGADORES_POR_EQUIPO = 15
-    MAX_EQUIPOS_POR_SEDE = 5
-    MAX_SEDES = 10
+    NUM_EQUIPOS = 5  # Cantidad fija de equipos por sede
+    NUM_SEDES = 10   # Cantidad fija de sedes
 
     print("Generando casos de prueba...")
     print(f"Configuración:")
     print(f"  - Min jugadores por equipo: {MIN_JUGADORES_POR_EQUIPO}")
     print(f"  - Max jugadores por equipo: {MAX_JUGADORES_POR_EQUIPO}")
-    print(f"  - Max equipos por sede: {MAX_EQUIPOS_POR_SEDE}")
-    print(f"  - Max sedes: {MAX_SEDES}")
+    print(f"  - Equipos por sede: {NUM_EQUIPOS}")
+    print(f"  - Sedes: {NUM_SEDES}")
     print()
 
     sedes, equipos, deportistas = generar_casos_prueba(
         MIN_JUGADORES_POR_EQUIPO,
         MAX_JUGADORES_POR_EQUIPO,
-        MAX_EQUIPOS_POR_SEDE,
-        MAX_SEDES
+        NUM_EQUIPOS,
+        NUM_SEDES
     )
 
     imprimir_resumen(sedes, equipos, deportistas)
