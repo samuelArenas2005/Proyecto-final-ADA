@@ -1,5 +1,5 @@
-from dataclasses import dataclass
 import RBTree
+import LinkedList
 
 #Implementa la clase Equipo, usa arboles roginegros para guardar a los deportistas
 class Team():
@@ -52,3 +52,56 @@ class Team():
     
     def get_ordered_list_ids(self):
         return self.ordered_ids
+
+class Site():
+    def __init__(self, name, teams = LinkedList.LinkedList(), average_performance = 0):
+        self.name = name
+        self.teams = teams
+    
+    def insert_teams(self, teams):
+        for team in teams:
+            node = LinkedList.Node(key=team.average_performance, data=team)
+            LinkedList.LIST_INSERT(self.teams, node)
+        self.order_teams_by_performance()
+    
+    def order_teams_by_performance(self):
+        LinkedList.LIST_MERGE_SORT(self.teams)
+    
+    def cal_average_performance(self):
+        total_performance = 0
+
+        current = self.teams.head
+        while current is not None:
+            total_performance += current.data.get_average_performance()
+            current = current.next
+        
+        if self.teams.size > 0:
+            self.average_performance = total_performance / self.teams.size
+        else:
+            self.average_performance = 0
+    
+    def get_average_performance(self):
+        return self.average_performance
+    
+    def get_worst_team(self):
+        if self.teams.tail is not None:
+            return self.teams.tail.data
+        return None
+    
+    def get_best_team(self):
+        if self.teams.head is not None:
+            return self.teams.head.data
+        return None
+
+class List_of_Sites():
+    def __init__(self, sites = LinkedList.LinkedList()):
+        self.sites = sites
+    
+    def insert_sites(self, sites):
+        for site in sites:
+            node = LinkedList.Node(key=site.average_performance, data=site)
+            LinkedList.LIST_INSERT(self.sites, node)
+        self.order_sites_by_performance()
+    
+    def order_sites_by_performance(self):
+        LinkedList.LIST_MERGE_SORT(self.sites)
