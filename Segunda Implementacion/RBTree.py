@@ -60,15 +60,27 @@ def TREE_INSERT(T: RBTree, x: Node):
         y = z
         if x.value < z.value:
             z = z.left
-        else:
+        elif x.value > z.value:
             z = z.right
+        else:  # x.value == z.value
+            # Si tienen el mismo rendimiento, comparar por edad
+            if x.sportsMan.age > z.sportsMan.age:
+                z = z.left  # Mayor edad va a la izquierda (primero)
+            else:
+                z = z.right  # Menor o igual edad va a la derecha (después)
     x.parent = y
     if y == None:
         T.root = x
     elif x.value < y.value:
         y.left = x
-    else:
+    elif x.value > y.value:
         y.right = x
+    else:  # x.value == y.value
+        # Si tienen el mismo rendimiento, comparar por edad
+        if x.sportsMan.age > y.sportsMan.age:
+            y.left = x  # Mayor edad va a la izquierda (primero)
+        else:
+            y.right = x  # Menor o igual edad va a la derecha (después)
 
 #Implementa la función de inserción en el árbol rojinegro con balanceo
 def RB_INSERT(T: RBTree, x: Node):
