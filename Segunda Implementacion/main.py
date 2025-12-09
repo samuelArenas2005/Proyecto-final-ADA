@@ -23,74 +23,26 @@ print("=" * 60)
 print("SEDE CALI")
 print("=" * 60)
 
+cali_equipo_futbol = Models.Team("Cali Fútbol Club")
+cali_equipo_futbol.insert_sportsmen([jugadores_base[1], jugadores_base[2], jugadores_base[3]])
+cali_equipo_basket = Models.Team("Cali Basket Club")
+cali_equipo_basket.insert_sportsmen([jugadores_base[4], jugadores_base[5], jugadores_base[6]])
 
-
-# Equipo Fútbol Cali: IDs 10, 2
-equipo_cali_futbol = Models.Team("Fútbol")
-deportistas_cali_futbol = [jugadores_base[10], jugadores_base[2]]
-equipo_cali_futbol.insert_sportsmen(deportistas_cali_futbol)
-equipo_cali_futbol.cal_average_performance()
-
-# Equipo Volleyball Cali: IDs 1, 9, 12, 6
-equipo_cali_volley = Models.Team("Volleyball")
-deportistas_cali_volley = [jugadores_base[1], jugadores_base[9], jugadores_base[6], jugadores_base[12]]
-equipo_cali_volley.insert_sportsmen(deportistas_cali_volley)
-equipo_cali_volley.cal_average_performance()
-
-# Crear Sede Cali
 sede_cali = Models.Site("Cali")
-sede_cali.insert_teams([equipo_cali_futbol, equipo_cali_volley])
-sede_cali.cal_average_performance()
+sede_cali.insert_teams([cali_equipo_futbol, cali_equipo_basket])
+print(sede_cali.get_oldest_player_across_teams())
 
-
-
-# --- SEDE MEDELLÍN ---
-print("\n" + "=" * 60)
-print("SEDE MEDELLÍN")
+print("=" * 60)
+print("SEDE MEDELLIN")
 print("=" * 60)
 
-# Equipo Fútbol Medellín: IDs 11, 8, 7
-equipo_medellin_futbol = Models.Team("Fútbol")
-deportistas_medellin_futbol = [jugadores_base[11], jugadores_base[8], jugadores_base[7]]
-equipo_medellin_futbol.insert_sportsmen(deportistas_medellin_futbol)
-equipo_medellin_futbol.cal_average_performance()
-
-# Equipo Volleyball Medellín: IDs 3, 4, 5
-equipo_medellin_volley = Models.Team("Volleyball")
-deportistas_medellin_volley = [jugadores_base[3], jugadores_base[4], jugadores_base[5]]
-equipo_medellin_volley.insert_sportsmen(deportistas_medellin_volley)
-equipo_medellin_volley.cal_average_performance()
-
-# Crear Sede Medellín
+medellin_equipo_futbol = Models.Team("Medellín Fútbol Club")
+medellin_equipo_futbol.insert_sportsmen([jugadores_base[7], jugadores_base[8]])
+medellin_equipo_basket = Models.Team("Medellín Basket Club")
+medellin_equipo_basket.insert_sportsmen([jugadores_base[9], jugadores_base[10], jugadores_base[11], jugadores_base[12]])
 sede_medellin = Models.Site("Medellín")
-sede_medellin.insert_teams([equipo_medellin_futbol, equipo_medellin_volley])
-sede_medellin.cal_average_performance()
+sede_medellin.insert_teams([medellin_equipo_futbol, medellin_equipo_basket])
+print(sede_medellin.get_oldest_player_across_teams())
 
-
-
-
-
-
-
-# --- RESUMEN GENERAL ---
-print("\n" + "=" * 60)
-print("RESUMEN GENERAL")
-print("=" * 60)
-lista_sedes = Models.List_of_Sites()
-lista_sedes.insert_sites([sede_cali, sede_medellin])
-print(f"Mejor Sede: Medellín ({sede_medellin.get_average_performance():.2f})") if sede_medellin.get_average_performance() > sede_cali.get_average_performance() else print(f"Mejor Sede: Cali ({sede_cali.get_average_performance():.2f})")
-
-print("Ejemplo medellin")
-print(f"Jugador más veterano de medellin: {sede_medellin.get_oldest_player_across_teams().name} ")
-print(f"Jugador mas viejo de cali: {sede_cali.get_oldest_player_across_teams().name} ")
-
-equipo_familia_medina = Models.Team("Familia Medina")
-deportistas_familia_medina = [jugadores_base[1], jugadores_base[2]]
-equipo_familia_medina.insert_sportsmen(deportistas_familia_medina)
-equipo_familia_medina.cal_average_performance()
-
-sede_medina = Models.Site("Medinalandia")
-sede_medina.insert_teams([equipo_familia_medina, equipo_cali_futbol])
-sede_medina.cal_average_performance()
-print("\n" + "=" * 60)
-print(f"Jugador medina mas viejo: {sede_medina.get_oldest_player_across_teams().name}")
+print("Volvemos a imprimir la sede de Cali para verificar que no se ha modificado:")
+print(sede_cali.get_oldest_player_across_teams())

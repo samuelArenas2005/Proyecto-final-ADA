@@ -4,11 +4,11 @@ import LinkedList
 #Implementa la clase Equipo, usa arboles roginegros para guardar a los deportistas
 class Team():
 
-    def __init__(self, name, rbTree=RBTree.RBTree(root=None), average_performance=0, ordered_ids = []):
+    def __init__(self, name, rbTree=None, average_performance=0, ordered_ids=None):
         self.name = name
-        self.rbTree = rbTree
+        self.rbTree = rbTree if rbTree is not None else RBTree.RBTree(root=None)
         self.average_performance = average_performance
-        self.ordered_ids = ordered_ids
+        self.ordered_ids = ordered_ids if ordered_ids is not None else []
     
     def insert_sportsmen(self, sportsmen):
         for sportsman in sportsmen:
@@ -124,9 +124,9 @@ class Team():
     
 
 class Site():
-    def __init__(self, name, teams = LinkedList.LinkedList(), average_performance = 0, total_sportsmen = 0):
+    def __init__(self, name, teams=None, average_performance=0, total_sportsmen=0):
         self.name = name
-        self.teams = teams
+        self.teams = teams if teams is not None else LinkedList.LinkedList()
         self.average_performance = average_performance
         self.total_sportsmen = total_sportsmen
     
@@ -205,8 +205,8 @@ class Site():
         return youngest_player
 
 class List_of_Sites():
-    def __init__(self, sites = LinkedList.LinkedList()):
-        self.sites = sites
+    def __init__(self, sites=None):
+        self.sites = sites if sites is not None else LinkedList.LinkedList()
     
     def insert_sites(self, sites):
         for site in sites:
