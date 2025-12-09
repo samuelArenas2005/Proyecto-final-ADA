@@ -87,7 +87,8 @@ class Deportista():
         
 
 class Equipo():
-    def __init__(self,deporte,deportistas):
+    def __init__(self,deporte,deportistas,sede=None):
+        self.sede = sede
         self.deporte = deporte
         self.deportistas = deportistas
         self.numeroDeportistas = len(deportistas)
@@ -112,6 +113,8 @@ class Sede():
     def __init__(self,nombre,equipos):
         self.nombre = nombre
         self.equipos = equipos 
+        for equipo in self.equipos:
+            equipo.sede = self
         self.listasIdOrdenados = []
         self.rendimientoPromedio= 0
         self.numeroEquipos = len(equipos)
@@ -133,4 +136,12 @@ class Sede():
         self.listasIdOrdenados = bucket_sort(self.equipos,"rendimientoPromedio")
         return self.listasIdOrdenados
 
-        
+def obtenerEquiposOrdenados(sedes):
+    todos_los_equipos = []
+    
+    for sede in sedes:
+        for equipo in sede.equipos:
+            todos_los_equipos.append(equipo)
+    equipos_ordenados = bucket_sort(todos_los_equipos, "rendimientoPromedio")
+    
+    return equipos_ordenados

@@ -1,4 +1,4 @@
-from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort
+from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort, obtenerEquiposOrdenados
 from pruebas import generacionPruebasCompleta
 
 
@@ -40,3 +40,10 @@ ranking = []
 for jugadores in jugadoresb:
     ranking.append(jugadores.id)
 print("Ranking general de deportistas por rendimiento: \n", ranking)
+
+equipos_ordenados = obtenerEquiposOrdenados(lista_de_sedes)
+equipo_menor = equipos_ordenados[0]
+print(f"\nEquipo con MENOR rendimiento: {equipo_menor.deporte} - Sede: {equipo_menor.sede.nombre} (Rendimiento: {equipo_menor.rendimientoPromedio:.2f})")
+
+equipo_mayor = equipos_ordenados[-1]
+print(f"Equipo con MAYOR rendimiento: {equipo_mayor.deporte} - Sede: {equipo_mayor.sede.nombre} (Rendimiento: {equipo_mayor.rendimientoPromedio:.2f})")
