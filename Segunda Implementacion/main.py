@@ -4,7 +4,7 @@ import RBTree
 
 # Base de deportistas disponibles
 jugadores_base = {
-    1: SportsMan(1, "Sofía García", 21, 66),
+    1: SportsMan(1, "Sofía García", 2000, 66),
     2: SportsMan(2, "Alejandro Torres", 27, 24),
     3: SportsMan(3, "Valentina Rodríguez", 19, 15),
     4: SportsMan(4, "Juan López", 22, 78),
