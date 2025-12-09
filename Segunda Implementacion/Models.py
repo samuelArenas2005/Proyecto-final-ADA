@@ -160,6 +160,30 @@ class Site():
         if self.teams.head is not None:
             return self.teams.tail.data
         return None
+    
+    def get_oldest_player_across_teams(self):
+        oldest_player = None
+
+        current = self.teams.head
+        while current is not None:
+            team_oldest = current.data.cal_most_veteran_player()
+            if oldest_player is None or (team_oldest is not None and team_oldest.age > oldest_player.age):
+                oldest_player = team_oldest
+            current = current.next
+        
+        return oldest_player
+    
+    def get_youngest_player_across_teams(self):
+        youngest_player = None
+
+        current = self.teams.head
+        while current is not None:
+            team_youngest = current.data.cal_youngest_player()
+            if youngest_player is None or (team_youngest is not None and team_youngest.age < youngest_player.age):
+                youngest_player = team_youngest
+            current = current.next
+        
+        return youngest_player
 
 class List_of_Sites():
     def __init__(self, sites = LinkedList.LinkedList()):
