@@ -41,7 +41,7 @@ def bucket_sort(arr,rendimientoName):
     for i in range(NUM_CUBETAS):
         cubeta_actual = cubetas[i]
         # Ordenar por rendimiento ascendente, en caso de empate por cantidad de deportistas descendente
-        cubeta_actual.sort(key=lambda elemento: (getattr(elemento, rendimientoName), -getattr(elemento, "numeroDeportistas")))
+        insertion_sort(cubeta_actual,rendimientoName)
         
     arr_ordenado = []
     for cubeta in cubetas:
@@ -50,6 +50,33 @@ def bucket_sort(arr,rendimientoName):
     
     return arr_ordenado
 
+def insertion_sort(arr,rendimientoName):
+    for i in range(1,len(arr)):
+        actual = arr[i]
+        j = i - 1
+        
+        rend_actual = getattr(actual, rendimientoName)
+        deport_actual = getattr(actual, "numeroDeportistas")
+        
+        while j>=0:
+            rend_j = getattr(arr[j], rendimientoName)
+            deport_j = getattr(arr[j], "numeroDeportistas")
+            
+            if rend_actual < rend_j:
+                arr[j+1] = arr[j]
+            
+            elif rend_actual == rend_j and deport_actual > deport_j:
+                arr[j+1] = arr[j]
+            
+            else:
+                break
+            
+            j -= 1
+        
+        arr[j+1] = actual
+        
+    return arr
+                
 
 class Deportista():
     def __init__(self,id,nombre,edad,rendimiento):
