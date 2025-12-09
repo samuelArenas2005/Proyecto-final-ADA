@@ -188,6 +188,7 @@ class Site():
             if oldest_player is None or (team_oldest is not None and team_oldest.age > oldest_player.age):
                 oldest_player = team_oldest
             current = current.next
+            print("Current team:", current.data.name if current else "None")
         
         return oldest_player
     
