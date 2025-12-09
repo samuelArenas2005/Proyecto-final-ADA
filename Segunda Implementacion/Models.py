@@ -56,8 +56,6 @@ class Team():
     def get_ordered_list_ids(self):
         return self.ordered_ids
     
-    #Funciones Danicol
-    
     def cal_max_performance(self):
         if self.rbTree.root is None:
             return None
@@ -107,7 +105,6 @@ class Team():
         return veteran_player   
 
     def cal_average_age(self):
-
         
         acum_age= 0
 
@@ -120,8 +117,6 @@ class Team():
         
         inorder_traversal(self.rbTree.root)
         return acum_age/self.rbTree.size if self.rbTree.size > 0 else 0
-    
-    
 
 class Site():
     def __init__(self, name, teams=None, average_performance=0, total_sportsmen=0):

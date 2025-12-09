@@ -54,6 +54,7 @@ def RIGHT_ROTATE(T: RBTree, x: Node):
 
 #Implementa la inserción de un nodo en el árbol rojinegro
 def TREE_INSERT(T: RBTree, x: Node):
+    T.size += 1  # Incrementar el tamaño del árbol
     y = None
     z = T.root
     while z != None:
@@ -85,7 +86,6 @@ def TREE_INSERT(T: RBTree, x: Node):
 #Implementa la función de inserción en el árbol rojinegro con balanceo
 def RB_INSERT(T: RBTree, x: Node):
     TREE_INSERT(T, x)
-    T.size += 1  # Incrementar el tamaño del árbol
     x.isBlack = False  # color[z] <- RED
     while x.parent != None and x.parent.isBlack == False:  # while color[p[x]]=RED
         if x.parent == x.parent.parent.left:  # do if p[x]=left[p[p[x]]]
