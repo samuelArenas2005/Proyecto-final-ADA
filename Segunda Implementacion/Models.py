@@ -216,3 +216,49 @@ class List_of_Sites():
     
     def order_sites_by_performance(self):
         LinkedList.LIST_MERGE_SORT(self.sites)
+
+    def get_oldest_player_across_Sites(self):
+        oldest_player = None
+        current = self.sites.head
+        while current is not None:
+            print("current site:", current.data.name if current else "None")
+            site_oldest = current.data.get_oldest_player_across_teams()
+            if oldest_player is None or (site_oldest is not None and site_oldest.age > oldest_player.age):
+                oldest_player = site_oldest
+            current = current.next
+        return oldest_player
+        
+    def get_youngest_player_across_Sites(self):
+        youngest_player = None
+        current = self.sites.head
+        while current is not None:
+            site_youngest = current.data.get_youngest_player_across_teams()
+            if youngest_player is None or (site_youngest is not None and site_youngest.age < youngest_player.age):
+                youngest_player = site_youngest
+            current = current.next
+        return youngest_player
+    
+    def get_best_team_across_Sites(self):
+        best_team = None
+        current = self.sites.head
+
+        print("Sites in the list:")
+        LinkedList.PRINT_LINKED_LIST(self.sites)
+        while current is not None:
+            site_best_team = current.data.get_best_team()
+            print("current site:", current.data.name if current else "None")
+            print("current team performance:", site_best_team.get_average_performance() if site_best_team else "None")
+            if best_team is None or (site_best_team is not None and site_best_team.get_average_performance() > best_team.get_average_performance()):
+                best_team = site_best_team
+            current = current.next
+        return best_team
+    
+    def get_worst_team_across_Sites(self):
+        worst_team = None
+        current = self.sites.head
+        while current is not None:
+            site_worst_team = current.data.get_worst_team()
+            if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() > worst_team.get_average_performance()):
+                worst_team = site_worst_team
+            current = current.next
+        return worst_team    
