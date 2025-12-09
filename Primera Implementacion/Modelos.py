@@ -1,32 +1,24 @@
 import math
 
-def counting_sort(arr,rendimientoName,idName):
-    # 1. Encontrar el valor máximo (k)
-    max_val = 100
+def counting_sort(arr, rendimientoName):
+    max_rendimiento = 100
+    max_edad = 100
+    
+    count = [[[] for _ in range(max_edad + 1)] for _ in range(max_rendimiento + 1)]
+    
+    # Agrupar elementos por rendimiento y edad
+    for elemento in arr:
+        rendimiento = int(getattr(elemento, rendimientoName))
+        edad = int(getattr(elemento, "edad"))
         
-    count = [0] * (max_val + 1)
-        
-        # 3. Contar la frecuencia de cada elemento
-    for num in arr:
-        rendimiento = getattr(num, rendimientoName)
-        count[rendimiento] += 1
-            
-    for i in range(1, len(count)):
-        count[i] += count[i - 1]
-            
-    # 5. Inicializar el arreglo de salida
-    output = [0] * len(arr)
-        
-    for num in reversed(arr):
-        # La posición final es count[num] - 1
-        rendimiento = getattr(num, rendimientoName)
-        id = getattr(num, idName)
-        posicion_final = count[rendimiento] - 1
-        output[posicion_final] = id
-            
-        # Decrementar el contador para el próximo número igual
-        count[num.rendimiento] -= 1
-        
+        count[rendimiento][edad].append(elemento)
+    
+    output = []
+    # Ordenar ascendente por rendimiento, y dentro de cada rendimiento descendente por edad
+    for rendimiento in range(max_rendimiento + 1):  
+        for edad in range(max_edad, -1, -1):  # Descendente por edad
+            output.extend(count[rendimiento][edad])
+    
     return output
 
 def bucket_sort(arr,rendimientoName):
@@ -48,7 +40,8 @@ def bucket_sort(arr,rendimientoName):
         
     for i in range(NUM_CUBETAS):
         cubeta_actual = cubetas[i]
-        cubeta_actual.sort(key=lambda elemento: getattr(elemento, rendimientoName))
+        # Ordenar por rendimiento ascendente, en caso de empate por cantidad de deportistas descendente
+        cubeta_actual.sort(key=lambda elemento: (getattr(elemento, rendimientoName), -getattr(elemento, "numeroDeportistas")))
         
     arr_ordenado = []
     for cubeta in cubetas:
@@ -67,11 +60,10 @@ class Deportista():
         
 
 class Equipo():
-    def __init__(self,deporte,deportistas,MaxDeportistas):
+    def __init__(self,deporte,deportistas):
         self.deporte = deporte
         self.deportistas = deportistas
         self.numeroDeportistas = len(deportistas)
-        self.MaxDeportistas = MaxDeportistas
         self.listasIdOrdenados = []
         self.rendimientoPromedio= 0
     
@@ -83,7 +75,8 @@ class Equipo():
         self.rendimientoPromedio = acumulado/self.numeroDeportistas
     
     def obtenerListaOrdenadaPorRendimiento(self):
-        self.listasIdOrdenados = counting_sort(self.deportistas,"rendimiento","id")
+        deportistas_ordenados = counting_sort(self.deportistas, "rendimiento")
+        self.listasIdOrdenados = [dep.id for dep in deportistas_ordenados]
         return self.listasIdOrdenados
         
             
@@ -95,6 +88,7 @@ class Sede():
         self.listasIdOrdenados = []
         self.rendimientoPromedio= 0
         self.numeroEquipos = len(equipos)
+        self.numeroDeportistas = sum(equipo.numeroDeportistas for equipo in equipos)
         
     def calcularRendimientoPromedio(self):
         self.calcularRendimientosPromediosEquipos()
