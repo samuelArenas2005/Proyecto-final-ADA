@@ -22,6 +22,21 @@ def LIST_INSERT(L: LinkedList, x: Node):
     L.head = x
     x.prev = None
 
+def LIST_INSERT_TAIL(L: LinkedList, x: Node):
+    """Inserta un nodo al final de la lista (por la cola) - O(1)"""
+    L.size += 1
+    x.next = None
+    if L.tail is None:
+        # Lista vacía
+        L.head = x
+        L.tail = x
+        x.prev = None
+    else:
+        # Insertar después del tail actual
+        L.tail.next = x
+        x.prev = L.tail
+        L.tail = x
+
 def LIST_SEARCH(L: LinkedList, key) -> Optional[Node]:
     x = L.head
     while x != None and x.key != key:
@@ -116,6 +131,60 @@ def MERGE(left: Node, right: Node) -> Node:
             if result.next is not None:
                 result.next.prev = result
             result.prev = None
+    
+    return result
+
+def MERGE_SIMPLE(left: Node, right: Node) -> Node:
+    """Combina dos listas ordenadas sin criterio de desempate adicional"""
+    if left is None:
+        return right
+    if right is None:
+        return left
+    
+    result = None
+    
+    if left.key <= right.key:
+        result = left
+        result.next = MERGE_SIMPLE(left.next, right)
+        if result.next is not None:
+            result.next.prev = result
+        result.prev = None
+    else:
+        result = right
+        result.next = MERGE_SIMPLE(left, right.next)
+        if result.next is not None:
+            result.next.prev = result
+        result.prev = None
+    
+    return result
+
+def MERGE_K_LISTS(lists: list) -> LinkedList:
+    """Merge de k listas enlazadas ordenadas usando divide y vencerás - O(n log k)"""
+    if not lists:
+        result = LinkedList()
+        return result
+    
+    if len(lists) == 1:
+        return lists[0]
+    
+    # Divide y vencerás
+    mid = len(lists) // 2
+    left = MERGE_K_LISTS(lists[:mid])
+    right = MERGE_K_LISTS(lists[mid:])
+    
+    # Merge de las dos mitades
+    merged_head = MERGE_SIMPLE(left.head, right.head)
+    
+    # Crear nueva lista con el resultado
+    result = LinkedList()
+    result.head = merged_head
+    result.size = left.size + right.size
+    
+    # Actualizar tail
+    current = result.head
+    while current is not None and current.next is not None:
+        current = current.next
+    result.tail = current
     
     return result
 

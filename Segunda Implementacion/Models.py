@@ -117,6 +117,20 @@ class Team():
         
         inorder_traversal(self.rbTree.root)
         return acum_age/self.rbTree.size if self.rbTree.size > 0 else 0
+    
+    def get_sportsmen_as_linked_list(self):
+        """Retorna LinkedList ordenada por performance usando recorrido inorden del árbol RB - O(n)"""
+        linked_list = LinkedList.LinkedList()
+        
+        def inorder_traversal(node):
+            if node is not None:
+                inorder_traversal(node.left)
+                new_node = LinkedList.Node(key=node.value, data=node.sportsMan)
+                LinkedList.LIST_INSERT_TAIL(linked_list, new_node)
+                inorder_traversal(node.right)
+        
+        inorder_traversal(self.rbTree.root)
+        return linked_list
 
 class Site():
     def __init__(self, name, teams=None, average_performance=0, total_sportsmen=0):
@@ -244,6 +258,28 @@ class Site():
             current = current.next
         
         return youngest_player
+    
+    def get_all_sportsmen_ranked_across_teams(self):
+        """Retorna LinkedList con todos los deportistas de la sede ordenados por performance
+        Usa merge de k listas aprovechando que cada árbol RB ya está ordenado - O(n log k)
+        """
+        # Pre-alocar lista con tamaño exacto
+        lists = [None] * self.teams.size
+        idx = 0
+        
+        # Recolectar listas ordenadas de cada equipo - O(n) total
+        current = self.teams.head
+        while current is not None:
+            team_list = current.data.get_sportsmen_as_linked_list()
+            lists[idx] = team_list
+            idx += 1
+            current = current.next
+        
+        # Merge de k listas usando divide y vencerás - O(n log k)
+        if not lists:
+            return LinkedList.LinkedList()
+        
+        return LinkedList.MERGE_K_LISTS(lists)
 
 class List_of_Sites():
     def __init__(self, sites=None):
@@ -366,5 +402,61 @@ class List_of_Sites():
             current = current.next
         return worst_player
     
+    def get_all_sportsmen_ranked_across_Sites(self):
+        """Retorna LinkedList con todos los deportistas de todas las sedes ordenados por performance
+        Usa merge de k listas aprovechando que cada árbol RB ya está ordenado - O(n log k)
+        donde k = número total de equipos en todas las sedes
+        """
+        # Pre-alocar lista con tamaño exacto
+        lists = [None] * self.sites.size
+        idx = 0
+        
+        # Recolectar listas ordenadas de cada sede
+        current = self.sites.head
+        while current is not None:
+            site_list = current.data.get_all_sportsmen_ranked_across_teams()
+            lists[idx] = site_list
+            idx += 1
+            current = current.next
+        
+        # Merge de k listas usando divide y vencerás
+        if not lists:
+            return LinkedList.LinkedList()
+        
+        return LinkedList.MERGE_K_LISTS(lists)
+    
+    def get_global_ranking(self):
+        """Retorna lista de Python con los IDs de todos los deportistas ordenados por performance"""
+        ranking_linked_list = self.get_all_sportsmen_ranked_across_Sites()
+        ids_list = []
+        
+        current = ranking_linked_list.head
+        while current is not None:
+            ids_list.append(current.data.id)
+            current = current.next
+        
+        return ids_list
+    
+    def get_global_ranking_detailed(self):
+        """Imprime el ranking global de todos los deportistas con detalles"""
+        ranking_linked_list = self.get_all_sportsmen_ranked_across_Sites()
+        
+        print("\n" + "=" * 60)
+        print("RANKING GLOBAL DE JUGADORES (por rendimiento)")
+        print("=" * 60)
+        
+        current = ranking_linked_list.head
+        posicion = 1
+        while current is not None:
+            jugador = current.data
+            print(f"{posicion}. {jugador.name} - Rendimiento: {jugador.performance} - Edad: {jugador.age}")
+            current = current.next
+            posicion += 1
+        
+        print(f"\nTotal de jugadores en el ranking: {ranking_linked_list.size}")
+    
+
+
+
 
 

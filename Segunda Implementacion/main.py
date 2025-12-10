@@ -102,3 +102,13 @@ print(f"El jugador con mejor rendimiento de todas las sedes: {lista_sedes.get_be
 print(f"El jugador con peor rendimiento de todas las sedes: {lista_sedes.get_worst_player_across_Sites()}")
 print(f"El promedio de edad de todas las sedes: {lista_sedes.cal_average_age_across_Sites():.2f}")
 print(f"El promedio de rendimiento de todas las sedes: {lista_sedes.cal_average_performance_across_Sites():.2f}")
+
+# --- RANKING GLOBAL DE JUGADORES ---
+lista_sedes.get_global_ranking_detailed()
+
+# Obtener lista de IDs ordenados
+print("\n" + "=" * 60)
+print("RANKING GLOBAL (solo IDs)")
+print("=" * 60)
+ranking_ids = lista_sedes.get_global_ranking()
+print(f"IDs ordenados por rendimiento: {ranking_ids}")
