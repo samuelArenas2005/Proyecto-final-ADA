@@ -294,14 +294,29 @@ class List_of_Sites():
     
     def cal_average_performance_across_Sites(self):
         total_performance = 0
-        cant=0
+        cant = 0
         current = self.sites.head
+        
         while current is not None:
-            current.data.cal_average_performance()
-            current.data.cal_number_of_sportsmen()
-            total_performance += current.data.get_average_performance()* current.data.get_number_of_sportsmen()
-            cant +=current.data.get_number_of_sportsmen()
+            site = current.data
+            # Recorrer todos los equipos de la sede
+            team_current = site.teams.head
+            while team_current is not None:
+                team = team_current.data
+                # Recorrer todos los deportistas del equipo
+                def inorder_traversal(node):
+                    nonlocal total_performance, cant
+                    if node is not None:
+                        inorder_traversal(node.left)
+                        total_performance += node.value  # node.value es el performance
+                        cant += 1
+                        inorder_traversal(node.right)
+                
+                inorder_traversal(team.rbTree.root)
+                team_current = team_current.next
+            
             current = current.next
+        
         print("Numero de jugadores total:", cant)
         return total_performance / cant if cant > 0 else 0
 
