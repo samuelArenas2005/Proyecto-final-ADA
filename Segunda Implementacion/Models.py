@@ -12,6 +12,9 @@ class Team():
         if sportsmen is not None:
             self.insert_sportsmen(sportsmen)
     
+    def get_name(self):
+        return self.name
+    
     def insert_sportsmen(self, sportsmen):
         for sportsman in sportsmen:
             node = RBTree.Node(
@@ -147,6 +150,9 @@ class Site():
         if teams is not None:
             self.insert_teams(teams)
     
+    def get_name(self):
+        return self.name
+    
     def insert_teams(self, teams):
         for team in teams:
             node = LinkedList.Node(key=team.average_performance, data=team)
@@ -276,11 +282,12 @@ class Site():
         lists = [None] * self.teams.size
         idx = 0
         
-        # Recolectar listas ordenadas de cada equipo - O(n) total
+        # Recolectar copias de listas ordenadas de cada equipo - O(n) total
         current = self.teams.head
         while current is not None:
             team_list = current.data.get_sportsmen_as_linked_list()
-            lists[idx] = team_list
+            # Copiar la lista para no modificar la original en el merge
+            lists[idx] = LinkedList.COPY_LINKED_LIST(team_list)
             idx += 1
             current = current.next
         
@@ -481,6 +488,41 @@ class List_of_Sites():
             posicion += 1
         
         print(f"\nTotal de jugadores en el ranking: {ranking_linked_list.size}")
+    
+    def print_structure_by_performance(self):
+        """Imprime la estructura jerárquica de sedes y equipos ordenados por rendimiento"""
+        # Primero ordenar las sedes por rendimiento si no lo están
+        self.order_sites_by_performance()
+        
+        print("\n" + "=" * 60)
+        print("ESTRUCTURA POR RENDIMIENTO")
+        print("=" * 60)
+        
+        # Recorrer sedes de mayor a menor rendimiento (desde el tail hacia atrás)
+        current_site = self.sites.tail
+        while current_site is not None:
+            site = current_site.data
+            site_performance = site.get_average_performance()
+            print(f"\nSede {site.get_name()} (Rendimiento: {site_performance:.2f}):")
+            
+            # Ordenar equipos de la sede por rendimiento
+            site.order_teams_by_performance()
+            
+            # Recorrer equipos de mayor a menor rendimiento (desde el tail hacia atrás)
+            current_team = site.teams.tail
+            while current_team is not None:
+                team = current_team.data
+                team_name = team.get_name()
+                team_performance = team.get_average_performance()
+                
+                # Obtener lista de IDs ordenados por rendimiento
+                ids_list = team.get_ordered_list_ids()
+                
+                print(f"\t{team_name} (Rendimiento: {team_performance:.2f}): {ids_list}")
+                
+                current_team = current_team.prev
+            
+            current_site = current_site.prev
     
 
 

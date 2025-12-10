@@ -112,3 +112,5 @@ print("RANKING GLOBAL (solo IDs)")
 print("=" * 60)
 ranking_ids = lista_sedes.get_global_ranking()
 print(f"IDs ordenados por rendimiento: {ranking_ids}")
+
+lista_sedes.print_structure_by_performance()

@@ -188,6 +188,22 @@ def MERGE_K_LISTS(lists: list) -> LinkedList:
     
     return result
 
+def COPY_LINKED_LIST(original: LinkedList) -> LinkedList:
+    """Crea una copia profunda de una lista enlazada - O(n)"""
+    if original is None or original.head is None:
+        return LinkedList()
+    
+    new_list = LinkedList()
+    current = original.head
+    
+    while current is not None:
+        # Crear nuevo nodo con los mismos datos
+        new_node = Node(key=current.key, data=current.data)
+        LIST_INSERT_TAIL(new_list, new_node)
+        current = current.next
+    
+    return new_list
+
 def PRINT_LINKED_LIST(L: LinkedList):
     """Imprime la lista enlazada de forma visual"""
     if L.head is None:

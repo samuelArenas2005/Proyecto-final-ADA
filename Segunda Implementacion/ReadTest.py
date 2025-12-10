@@ -77,6 +77,8 @@ def main():
             
             current = current.next
         
+        list_of_sites.print_structure_by_performance()
+        
         return list_of_sites
     else:
         print("\n✗ No se pudo crear el List_of_Sites")
