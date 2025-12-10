@@ -1,7 +1,6 @@
 import time 
 from pruebas import generacionPruebasCompleta
-from Modelos import bucket_sort
-from Modelos import counting_sort
+from Modelos import bucket_sort, counting_sort
 
 def generarDatosSedes(n):
     jugadores_base, lista_de_sedes = generacionPruebasCompleta(
@@ -46,7 +45,11 @@ def algoritmoRanking(datos):
     for jugadores in datos:
      ranking.append(jugadores.id)
     return ranking         
-
+def algoritmoRendimientosExtremos(datos):  
+    datos = counting_sort(list(datos.values()),"rendimiento")
+    menor = (datos[0].id, datos[0].nombre, datos[0].rendimiento)
+    mayor = (datos[-1].id, datos[-1].nombre, datos[-1].rendimiento)
+    return menor, mayor
 def medir_tiempo(algoritmo,datos):
     inicio = time.perf_counter()
     algoritmo(datos)
@@ -74,3 +77,6 @@ print("Tiempos realizando el ordenamiento de las sedes en distintos tamaños")
 print(correrPruebas(algoritmoOrdernarSedes,generarDatosSedes,tamanosCambiandoSedes))
 print("Tiempos realizando el ranking de los todos los jugadores en distintos tamaños")
 print(correrPruebas(algoritmoRanking,generarDatosJugadores,tamanoJugadores))
+print("Tiempos realizando la obtención del jugador con mayor y menor rendimiento en distintos tamaños")
+print(correrPruebas(algoritmoRendimientosExtremos,generarDatosJugadores,tamanoJugadores))
+#print(correrPruebas(rendimientosExtremos,generarDatosJugadores,tamanoJugadores))
