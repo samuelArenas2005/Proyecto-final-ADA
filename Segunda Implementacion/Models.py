@@ -155,7 +155,7 @@ class Site():
     
     def insert_teams(self, teams):
         for team in teams:
-            node = LinkedList.Node(key=team.average_performance, data=team)
+            node = LinkedList.Node(key=team.get_average_performance(), data=team)
             LinkedList.LIST_INSERT(self.teams, node)
         self.order_teams_by_performance()
     
@@ -258,7 +258,6 @@ class Site():
             if oldest_player is None or (team_oldest is not None and team_oldest.age > oldest_player.age):
                 oldest_player = team_oldest
             current = current.next
-            print("Current team:", current.data.name if current else "None")
         
         return oldest_player
     
@@ -307,7 +306,8 @@ class List_of_Sites():
     
     def insert_sites(self, sites):
         for site in sites:
-            node = LinkedList.Node(key=site.average_performance, data=site)
+            performance_key = site.get_average_performance()
+            node = LinkedList.Node(key=performance_key, data=site)
             LinkedList.LIST_INSERT(self.sites, node)
         self.order_sites_by_performance()
     
@@ -318,11 +318,14 @@ class List_of_Sites():
         oldest_player = None
         current = self.sites.head
         while current is not None:
-            print("current site:", current.data.name if current else "None")
             site_oldest = current.data.get_oldest_player_across_teams()
             if oldest_player is None or (site_oldest is not None and site_oldest.age > oldest_player.age):
                 oldest_player = site_oldest
             current = current.next
+        if oldest_player is not None:
+            print("El jugador más veterano de todas las sedes es:", oldest_player.name, "- Edad:", oldest_player.age, "\n")
+        else:
+            print("No hay jugadores registrados en las sedes.\n")
         return oldest_player
         
     def get_youngest_player_across_Sites(self):
@@ -333,9 +336,13 @@ class List_of_Sites():
             if youngest_player is None or (site_youngest is not None and site_youngest.age < youngest_player.age):
                 youngest_player = site_youngest
             current = current.next
+        if youngest_player is not None:
+            print("El jugador más joven de todas las sedes es:", youngest_player.name, "- Edad:", youngest_player.age, "\n")
+        else:
+            print("No hay jugadores registrados en las sedes.\n")
         return youngest_player
     
-    def cal_average_age_across_Sites(self):
+    def get_average_age_across_Sites(self):
         cant=0
         total_age=0
         current = self.sites.head
@@ -344,9 +351,11 @@ class List_of_Sites():
             total_age += current.data.cal_average_age_in_site() * current.data.get_number_of_sportsmen()
             cant += current.data.get_number_of_sportsmen()
             current = current.next
-        return total_age/cant if cant>0 else 0
+        average_age = total_age / cant if cant > 0 else 0
+        print("\nEl promedio de edades entre todas las sedes es:", average_age, "\n")
+        return average_age
     
-    def cal_average_performance_across_Sites(self):
+    def get_average_performance_across_Sites(self):
         total_performance = 0
         cant = 0
         current = self.sites.head
@@ -370,24 +379,21 @@ class List_of_Sites():
                 team_current = team_current.next
             
             current = current.next
-        
-        print("Numero de jugadores total:", cant)
-        return total_performance / cant if cant > 0 else 0
+        average_performance = total_performance / cant if cant > 0 else 0
+        print("\nEl promedio de rendimiento entre todas las sedes es:", average_performance, "\n")
+        return average_performance
 
     
     def get_best_team_across_Sites(self):
         best_team = None
         current = self.sites.head
-
-        print("Sites in the list:")
         LinkedList.PRINT_LINKED_LIST(self.sites)
         while current is not None:
             site_best_team = current.data.get_best_team()
-            print("current site:", current.data.name if current else "None")
-            print("current team performance:", site_best_team.get_average_performance() if site_best_team else "None")
             if best_team is None or (site_best_team is not None and site_best_team.get_average_performance() > best_team.get_average_performance()):
                 best_team = site_best_team
             current = current.next
+        print("El mejor equipo de todas las sedes es:", best_team.name if best_team else "None", "\n")
         return best_team
     
     def get_worst_team_across_Sites(self):
@@ -398,12 +404,15 @@ class List_of_Sites():
             if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() < worst_team.get_average_performance()):
                 worst_team = site_worst_team
             current = current.next
+        print("El peor equipo de todas las sedes es:", worst_team.name if worst_team else "None", "\n")
         return worst_team
     
     def get_best_player_across_Sites(self):
         # Si ya tenemos el ranking global calculado, usar la cola (último = mejor performance)
         if self.global_linked_list is not None and self.global_linked_list.tail is not None:
-            return self.global_linked_list.tail.data
+            best_player = self.global_linked_list.tail.data
+            print("El mejor jugador de todas las sedes es:", best_player.name if best_player else "None", "\n")
+            return best_player
         
         # Si no está calculado, buscar manualmente
         best_player = None
@@ -413,12 +422,16 @@ class List_of_Sites():
             if best_player is None or (site_best_player is not None and site_best_player.performance > best_player.performance):
                 best_player = site_best_player
             current = current.next
+        
+        print("El mejor jugador de todas las sedes es:", best_player.name if best_player else "None", "\n")
         return best_player
     
     def get_worst_player_across_Sites(self):
         # Si ya tenemos el ranking global calculado, usar la cabeza (primero = peor performance)
         if self.global_linked_list is not None and self.global_linked_list.head is not None:
-            return self.global_linked_list.head.data
+            worst_player = self.global_linked_list.head.data
+            print("El peor jugador de todas las sedes es:", worst_player.name if worst_player else "None", "\n")
+            return worst_player
         
         # Si no está calculado, buscar manualmente
         worst_player = None
@@ -428,6 +441,8 @@ class List_of_Sites():
             if worst_player is None or (site_worst_player is not None and site_worst_player.performance < worst_player.performance):
                 worst_player = site_worst_player
             current = current.next
+        
+        print("El peor jugador de todas las sedes es:", worst_player.name if worst_player else "None", "\n")
         return worst_player
     
     def cal_global_sportsmen_linked_list(self):
@@ -469,6 +484,7 @@ class List_of_Sites():
             ids_list.append(current.data.id)
             current = current.next
         
+        print("Ranking De Jugadores por IDs:\n", ids_list, "\n")
         return ids_list
     
     def get_global_ranking_detailed(self):
@@ -489,7 +505,7 @@ class List_of_Sites():
         
         print(f"\nTotal de jugadores en el ranking: {ranking_linked_list.size}")
     
-    def print_structure_by_performance(self):
+    def get_structure_by_performance(self):
         """Imprime la estructura jerárquica de sedes y equipos ordenados por rendimiento"""
         # Primero ordenar las sedes por rendimiento si no lo están
         self.order_sites_by_performance()

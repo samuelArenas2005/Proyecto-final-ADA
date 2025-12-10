@@ -77,7 +77,7 @@ def main():
             
             current = current.next
         
-        list_of_sites.print_structure_by_performance()
+        list_of_sites.get_structure_by_performance()
         
         return list_of_sites
     else:
