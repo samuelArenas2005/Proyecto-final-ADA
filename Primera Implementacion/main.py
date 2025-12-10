@@ -1,4 +1,4 @@
-from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort
+from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort, ranking, rendimientosExtremos, rendimientoEquipos, edadesExtremos, rendimientoPromedioTotal, edadPromedioTotal
 from pruebas import generacionPruebasCompleta
 
 
@@ -11,7 +11,6 @@ jugadores_base, lista_de_sedes = generacionPruebasCompleta(
     maxDeportes=5,                  # Máximo de deportes por sede
     numeroSedes=2                  # Número de sedes
 )
-jugadoresb = counting_sort(list(jugadores_base.values()),"rendimiento")
 
 print("\n" + "="*70)
 print(f"{'ID':<5} {'Nombre':<30} {'Edad':<8} {'Rendimiento':<10}")
@@ -36,7 +35,9 @@ for sede in reversed(listasIdOrdenados):
         print("\t",equipo.deporte,": ", listasIdOrdenadosDeportistas, "\n")
 
 
-ranking = []
-for jugadores in jugadoresb:
-    ranking.append(jugadores.id)
-print("Ranking general de deportistas por rendimiento: \n", ranking)
+ranking(jugadores_base)
+rendimientosExtremos(jugadores_base)
+rendimientoEquipos(lista_de_sedes)
+edadesExtremos(jugadores_base)
+edadPromedioTotal(jugadores_base)
+rendimientoPromedioTotal(jugadores_base)

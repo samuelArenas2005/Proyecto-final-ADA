@@ -4,18 +4,18 @@ import RBTree
 
 # Base de deportistas disponibles
 jugadores_base = {
-    1: SportsMan(1, "Sofía Medina", 100, 1),
-    2: SportsMan(2, "Alejandro medina", 27, 1),
-    3: SportsMan(3, "Valentina Rodríguez", 19, 2),
-    4: SportsMan(4, "Juan López", 22, 2),
-    5: SportsMan(5, "Martina Martínez", 30, 2),
+    1: SportsMan(1, "Sofía García", 21, 66),
+    2: SportsMan(2, "Alejandro Torres", 27, 24),
+    3: SportsMan(3, "Valentina Rodríguez", 19, 15),
+    4: SportsMan(4, "Juan López", 22, 78),
+    5: SportsMan(5, "Martina Martínez", 30, 55),
     6: SportsMan(6, "Sebastián Pérez", 25, 42),
     7: SportsMan(7, "Camila Fernández", 24, 36),
     8: SportsMan(8, "Mateo González", 29, 89),
-    9: SportsMan(9, "Isabella Díaz", 212, 0),
-    10: SportsMan(10, "Daniel Ruiz", 4, 1),
-    11: SportsMan(11, "Luciana Sánchez", 18, 8),
-    12: SportsMan(12, "Lucas Vásquez", 26, 0),
+    9: SportsMan(9, "Isabella Díaz", 21, 92),
+    10: SportsMan(10, "Daniel Ruiz", 17, 57),
+    11: SportsMan(11, "Luciana Sánchez", 18, 89),
+    12: SportsMan(12, "Lucas Vásquez", 26, 82),
 }
 
 # --- SEDE CALI ---

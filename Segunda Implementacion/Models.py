@@ -4,11 +4,11 @@ import LinkedList
 #Implementa la clase Equipo, usa arboles roginegros para guardar a los deportistas
 class Team():
 
-    def __init__(self, name, sportsmen=None, average_performance=0, ordered_ids=None):
+    def __init__(self, name, sportsmen=None, average_performance=None, linked_list=None):
         self.name = name
         self.rbTree = RBTree.RBTree(root=None)
         self.average_performance = average_performance
-        self.ordered_ids = ordered_ids if ordered_ids is not None else []
+        self.linked_list = linked_list
         if sportsmen is not None:
             self.insert_sportsmen(sportsmen)
     
@@ -37,26 +37,25 @@ class Team():
         else:
             self.average_performance = 0
 
-    def cal_ordered_list_ids(self):
-        ordered_ids = []
-
-        def inorder_traversal(node):
-            if node is not None:
-                inorder_traversal(node.left)
-                ordered_ids.append(node.sportsMan.id)
-                inorder_traversal(node.right)
+    def get_ordered_list_ids(self):
+        """Retorna lista de Python con los IDs ordenados por performance"""
+        if self.linked_list is None:
+            self.cal_sportsmen_linked_list()
         
-        inorder_traversal(self.rbTree.root)
-        self.ordered_ids = ordered_ids
+        ids_list = []
+        current = self.linked_list.head
+        while current is not None:
+            ids_list.append(current.data.id)
+            current = current.next
+        return ids_list
     
     def get_number_of_sportsmen(self):
         return self.rbTree.size
     
     def get_average_performance(self):
+        if self.average_performance is None:
+            self.cal_average_performance()
         return self.average_performance
-    
-    def get_ordered_list_ids(self):
-        return self.ordered_ids
     
     def cal_max_performance(self):
         if self.rbTree.root is None:
@@ -118,8 +117,8 @@ class Team():
         inorder_traversal(self.rbTree.root)
         return acum_age/self.rbTree.size if self.rbTree.size > 0 else 0
     
-    def get_sportsmen_as_linked_list(self):
-        """Retorna LinkedList ordenada por performance usando recorrido inorden del árbol RB - O(n)"""
+    def cal_sportsmen_linked_list(self):
+        """Calcula y cachea LinkedList ordenada por performance usando recorrido inorden del árbol RB - O(n)"""
         linked_list = LinkedList.LinkedList()
         
         def inorder_traversal(node):
@@ -130,10 +129,17 @@ class Team():
                 inorder_traversal(node.right)
         
         inorder_traversal(self.rbTree.root)
-        return linked_list
+        self.linked_list = linked_list
+    
+    def get_sportsmen_as_linked_list(self):
+        """Retorna LinkedList ordenada por performance (lazy evaluation)"""
+        if self.linked_list is None:
+            self.cal_sportsmen_linked_list()
+        return self.linked_list
+
 
 class Site():
-    def __init__(self, name, teams=None, average_performance=0, total_sportsmen=0):
+    def __init__(self, name, teams=None, average_performance=None, total_sportsmen=None):
         self.name = name
         self.teams = LinkedList.LinkedList()
         self.average_performance = average_performance
@@ -146,7 +152,6 @@ class Site():
             node = LinkedList.Node(key=team.average_performance, data=team)
             LinkedList.LIST_INSERT(self.teams, node)
         self.order_teams_by_performance()
-        self.cal_number_of_sportsmen()
     
     def order_teams_by_performance(self):
         LinkedList.LIST_MERGE_SORT(self.teams)
@@ -185,6 +190,8 @@ class Site():
             self.average_performance = 0
     
     def get_average_performance(self):
+        if self.average_performance is None:
+            self.cal_average_performance()
         return self.average_performance
 
     def cal_number_of_sportsmen(self):
@@ -198,6 +205,8 @@ class Site():
         self.total_sportsmen = total_sportsmen
     
     def get_number_of_sportsmen(self):
+        if self.total_sportsmen is None:
+            self.cal_number_of_sportsmen()
         return self.total_sportsmen
     
     def get_best_player_across_teams(self):
@@ -281,9 +290,11 @@ class Site():
         
         return LinkedList.MERGE_K_LISTS(lists)
 
+
 class List_of_Sites():
-    def __init__(self, sites=None):
+    def __init__(self, sites=None, global_linked_list=None):
         self.sites = LinkedList.LinkedList()
+        self.global_linked_list = global_linked_list
         if sites is not None:
             self.insert_sites(sites)
     
@@ -383,6 +394,11 @@ class List_of_Sites():
         return worst_team
     
     def get_best_player_across_Sites(self):
+        # Si ya tenemos el ranking global calculado, usar la cola (último = mejor performance)
+        if self.global_linked_list is not None and self.global_linked_list.tail is not None:
+            return self.global_linked_list.tail.data
+        
+        # Si no está calculado, buscar manualmente
         best_player = None
         current = self.sites.head
         while current is not None:
@@ -393,6 +409,11 @@ class List_of_Sites():
         return best_player
     
     def get_worst_player_across_Sites(self):
+        # Si ya tenemos el ranking global calculado, usar la cabeza (primero = peor performance)
+        if self.global_linked_list is not None and self.global_linked_list.head is not None:
+            return self.global_linked_list.head.data
+        
+        # Si no está calculado, buscar manualmente
         worst_player = None
         current = self.sites.head
         while current is not None:
@@ -402,11 +423,8 @@ class List_of_Sites():
             current = current.next
         return worst_player
     
-    def get_all_sportsmen_ranked_across_Sites(self):
-        """Retorna LinkedList con todos los deportistas de todas las sedes ordenados por performance
-        Usa merge de k listas aprovechando que cada árbol RB ya está ordenado - O(n log k)
-        donde k = número total de equipos en todas las sedes
-        """
+    def cal_global_sportsmen_linked_list(self):
+        """Calcula y cachea la LinkedList global con todos los deportistas ordenados por performance"""
         # Pre-alocar lista con tamaño exacto
         lists = [None] * self.sites.size
         idx = 0
@@ -421,9 +439,18 @@ class List_of_Sites():
         
         # Merge de k listas usando divide y vencerás
         if not lists:
-            return LinkedList.LinkedList()
-        
-        return LinkedList.MERGE_K_LISTS(lists)
+            self.global_linked_list = LinkedList.LinkedList()
+        else:
+            self.global_linked_list = LinkedList.MERGE_K_LISTS(lists)
+    
+    def get_all_sportsmen_ranked_across_Sites(self):
+        """Retorna LinkedList con todos los deportistas de todas las sedes ordenados por performance
+        Usa merge de k listas aprovechando que cada árbol RB ya está ordenado - O(n log k)
+        donde k = número total de equipos en todas las sedes
+        """
+        if self.global_linked_list is None:
+            self.cal_global_sportsmen_linked_list()
+        return self.global_linked_list
     
     def get_global_ranking(self):
         """Retorna lista de Python con los IDs de todos los deportistas ordenados por performance"""
