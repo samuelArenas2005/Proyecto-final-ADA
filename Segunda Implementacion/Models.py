@@ -108,9 +108,7 @@ class Team():
 
     def cal_average_age(self):
 
-        
         acum_age= 0
-
         def inorder_traversal(node):
             nonlocal acum_age
             if node is not None:
@@ -139,6 +137,26 @@ class Site():
     
     def order_teams_by_performance(self):
         LinkedList.LIST_MERGE_SORT(self.teams)
+
+    
+    def cal_average_age_in_site(self):
+        total_age = 0
+        total_sportsmen = 0
+
+        current = self.teams.head
+        while current is not None:
+            team = current.data
+            def inorder_traversal(node):
+                nonlocal total_age, total_sportsmen
+                if node is not None:
+                    inorder_traversal(node.left)
+                    total_age += node.sportsMan.age
+                    total_sportsmen += 1
+                    inorder_traversal(node.right)
+            inorder_traversal(team.rbTree.root)
+            current = current.next
+        
+        return total_age / total_sportsmen if total_sportsmen > 0 else 0
     
     def cal_average_performance(self):
         total_performance = 0
@@ -168,6 +186,30 @@ class Site():
     
     def get_number_of_sportsmen(self):
         return self.total_sportsmen
+    
+    def get_best_player_across_teams(self):
+        best_player = None
+
+        current = self.teams.head
+        while current is not None:
+            team_best = current.data.cal_max_performance()
+            if best_player is None or (team_best is not None and team_best.performance > best_player.performance):
+                best_player = team_best
+            current = current.next
+        
+        return best_player
+    def get_worst_player_across_teams(self):
+        worst_player = None
+
+        current = self.teams.head
+        while current is not None:
+            team_worst = current.data.cal_min_performance()
+            if worst_player is None or (team_worst is not None and team_worst.performance < worst_player.performance):
+                worst_player = team_worst
+            current = current.next
+        
+        return worst_player
+    
     
     def get_worst_team(self):
         if self.teams.tail is not None:
@@ -238,6 +280,31 @@ class List_of_Sites():
             current = current.next
         return youngest_player
     
+    def cal_average_age_across_Sites(self):
+        cant=0
+        total_age=0
+        current = self.sites.head
+        while current is not None:
+            current.data.cal_number_of_sportsmen()
+            total_age += current.data.cal_average_age_in_site() * current.data.get_number_of_sportsmen()
+            cant += current.data.get_number_of_sportsmen()
+            current = current.next
+        return total_age/cant if cant>0 else 0
+    
+    def cal_average_performance_across_Sites(self):
+        total_performance = 0
+        cant=0
+        current = self.sites.head
+        while current is not None:
+            current.data.cal_average_performance()
+            current.data.cal_number_of_sportsmen()
+            total_performance += current.data.get_average_performance()* current.data.get_number_of_sportsmen()
+            cant +=current.data.get_number_of_sportsmen()
+            current = current.next
+        print("Numero de jugadores total:", cant)
+        return total_performance / cant if cant > 0 else 0
+
+    
     def get_best_team_across_Sites(self):
         best_team = None
         current = self.sites.head
@@ -258,7 +325,30 @@ class List_of_Sites():
         current = self.sites.head
         while current is not None:
             site_worst_team = current.data.get_worst_team()
-            if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() > worst_team.get_average_performance()):
+            if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() < worst_team.get_average_performance()):
                 worst_team = site_worst_team
             current = current.next
-        return worst_team    
+        return worst_team
+    
+    def get_best_player_across_Sites(self):
+        best_player = None
+        current = self.sites.head
+        while current is not None:
+            site_best_player = current.data.get_best_player_across_teams()
+            if best_player is None or (site_best_player is not None and site_best_player.performance > best_player.performance):
+                best_player = site_best_player
+            current = current.next
+        return best_player
+    
+    def get_worst_player_across_Sites(self):
+        worst_player = None
+        current = self.sites.head
+        while current is not None:
+            site_worst_player = current.data.get_worst_player_across_teams()
+            if worst_player is None or (site_worst_player is not None and site_worst_player.performance < worst_player.performance):
+                worst_player = site_worst_player
+            current = current.next
+        return worst_player
+    
+
+
