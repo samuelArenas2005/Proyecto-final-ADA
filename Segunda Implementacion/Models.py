@@ -4,11 +4,13 @@ import LinkedList
 #Implementa la clase Equipo, usa arboles roginegros para guardar a los deportistas
 class Team():
 
-    def __init__(self, name, rbTree=None, average_performance=0, ordered_ids=None):
+    def __init__(self, name, sportsmen=None, average_performance=0, ordered_ids=None):
         self.name = name
-        self.rbTree = rbTree if rbTree is not None else RBTree.RBTree(root=None)
+        self.rbTree = RBTree.RBTree(root=None)
         self.average_performance = average_performance
         self.ordered_ids = ordered_ids if ordered_ids is not None else []
+        if sportsmen is not None:
+            self.insert_sportsmen(sportsmen)
     
     def insert_sportsmen(self, sportsmen):
         for sportsman in sportsmen:
@@ -121,9 +123,11 @@ class Team():
 class Site():
     def __init__(self, name, teams=None, average_performance=0, total_sportsmen=0):
         self.name = name
-        self.teams = teams if teams is not None else LinkedList.LinkedList()
+        self.teams = LinkedList.LinkedList()
         self.average_performance = average_performance
         self.total_sportsmen = total_sportsmen
+        if teams is not None:
+            self.insert_teams(teams)
     
     def insert_teams(self, teams):
         for team in teams:
@@ -201,7 +205,9 @@ class Site():
 
 class List_of_Sites():
     def __init__(self, sites=None):
-        self.sites = sites if sites is not None else LinkedList.LinkedList()
+        self.sites = LinkedList.LinkedList()
+        if sites is not None:
+            self.insert_sites(sites)
     
     def insert_sites(self, sites):
         for site in sites:
@@ -253,7 +259,7 @@ class List_of_Sites():
         current = self.sites.head
         while current is not None:
             site_worst_team = current.data.get_worst_team()
-            if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() > worst_team.get_average_performance()):
+            if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() < worst_team.get_average_performance()):
                 worst_team = site_worst_team
             current = current.next
         return worst_team    
