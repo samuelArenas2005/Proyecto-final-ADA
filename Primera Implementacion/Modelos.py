@@ -1,6 +1,6 @@
 import math
 
-def counting_sort(arr, criterionName):
+def counting_sort(arr, criterioName):
     max_rendimiento = 100
     max_edad = 100
     
@@ -8,7 +8,7 @@ def counting_sort(arr, criterionName):
     
     # Agrupar elementos por rendimiento y edad
     for elemento in arr:
-        rendimiento = int(getattr(elemento, criterionName))
+        rendimiento = int(getattr(elemento, criterioName))
         edad = int(getattr(elemento, "edad"))
         
         count[rendimiento][edad].append(elemento)
@@ -21,14 +21,14 @@ def counting_sort(arr, criterionName):
     
     return output
 
-def counting_sortSimple(arr, criterionName):
+def counting_sortSimple(arr, criterioName):
     max_valor = 100
     
     count = [[] for _ in range(max_valor + 1)]
     
     # Agrupar elementos por el atributo especificado
     for elemento in arr:
-        valor = int(getattr(elemento, criterionName))
+        valor = int(getattr(elemento, criterioName))
         count[valor].append(elemento)
     
     output = []
@@ -38,13 +38,13 @@ def counting_sortSimple(arr, criterionName):
     
     return output
 
-def bucket_sort(arr,criterionName):
+def bucket_sort(arr,rendimientoName):
     NUM_CUBETAS = 10
     
     cubetas = [[] for _ in range(NUM_CUBETAS)]
     
     for elemento in arr:
-        rendimiento = getattr(elemento, criterionName)
+        rendimiento = getattr(elemento, rendimientoName)
         if rendimiento == 100.0:
             indice_cubeta = NUM_CUBETAS - 1
         else:
@@ -58,7 +58,7 @@ def bucket_sort(arr,criterionName):
     for i in range(NUM_CUBETAS):
         cubeta_actual = cubetas[i]
         # Ordenar por rendimiento ascendente, en caso de empate por cantidad de deportistas descendente
-        insertion_sort(cubeta_actual,criterionName)
+        insertion_sort(cubeta_actual,rendimientoName)
         
     arr_ordenado = []
     for cubeta in cubetas:
@@ -67,16 +67,16 @@ def bucket_sort(arr,criterionName):
     
     return arr_ordenado
 
-def insertion_sort(arr,rendimientoName):
+def insertion_sort(arr,criterioName):
     for i in range(1,len(arr)):
         actual = arr[i]
         j = i - 1
         
-        rend_actual = getattr(actual, rendimientoName)
+        rend_actual = getattr(actual, criterioName)
         deport_actual = getattr(actual, "numeroDeportistas")
         
         while j>=0:
-            rend_j = getattr(arr[j], rendimientoName)
+            rend_j = getattr(arr[j], criterioName)
             deport_j = getattr(arr[j], "numeroDeportistas")
             
             if rend_actual < rend_j:
