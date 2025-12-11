@@ -1,5 +1,7 @@
 import math
 
+#ALGORITMOS DE ORDENAMIENTO
+
 def counting_sort(arr, criterioName):
     max_rendimiento = 100
     max_edad = 100
@@ -94,6 +96,7 @@ def insertion_sort(arr,criterioName):
         
     return arr
                 
+#CLASES PRINCIPALES
 
 class Deportista():
     def __init__(self,id,nombre,edad,rendimiento):
@@ -124,7 +127,6 @@ class Equipo():
         self.listasIdOrdenados = [dep.id for dep in deportistas_ordenados]
         return self.listasIdOrdenados
         
-            
 
 class Sede():
     def __init__(self,nombre,equipos):
@@ -153,6 +155,25 @@ class Sede():
         self.listasIdOrdenados = bucket_sort(self.equipos,"rendimientoPromedio")
         return self.listasIdOrdenados
 
+
+
+#SOLUCIÓN DEL EJERICIO
+
+def ranckingSedes(lista_de_sedes):
+        # Calcular rendimientos y ordenar
+    for sede in lista_de_sedes:
+        sede.calcularRendimientoPromedio()
+
+    listasIdOrdenados = bucket_sort(lista_de_sedes, "rendimientoPromedio")
+
+    print("=== RESULTADOS===\n")
+    for sede in reversed(listasIdOrdenados):
+        print("Sede ", sede.nombre , ":\n")
+        listasIdOrdenadosEquipos = sede.obtenerListaOrdenadaPorRendimiento()
+        for equipo in reversed(listasIdOrdenadosEquipos):
+            listasIdOrdenadosDeportistas = equipo.obtenerListaOrdenadaPorRendimiento()
+            print("\t",equipo.deporte,": ", listasIdOrdenadosDeportistas, "\n")
+
 def ranking(jugadores_base):
     jugadoresb = counting_sort(list(jugadores_base.values()),"rendimiento")
     ranking = []
@@ -171,15 +192,15 @@ def rendimientoEquipos(sedes):
         todos_los_equipos.extend(sede.equipos)
     equipos_ordenados = bucket_sort(todos_los_equipos, "rendimientoPromedio")
     equipo_menor = equipos_ordenados[0]
-    print(f"\nEquipo con MENOR rendimiento: {equipo_menor.deporte} - Sede: {equipo_menor.sede.nombre} (Rendimiento: {equipo_menor.rendimientoPromedio:.2f})")
+    print(f"Equipo con MENOR rendimiento: {equipo_menor.deporte} - Sede: {equipo_menor.sede.nombre} (Rendimiento: {equipo_menor.rendimientoPromedio:.2f})")
 
     equipo_mayor = equipos_ordenados[-1]
     print(f"Equipo con MAYOR rendimiento: {equipo_mayor.deporte} - Sede: {equipo_mayor.sede.nombre} (Rendimiento: {equipo_mayor.rendimientoPromedio:.2f})")
 
 def edadesExtremos(jugadores_base):  
     jugadoresb = counting_sortSimple(list(jugadores_base.values()),"edad")
-    print("Jugador más joven: ", jugadoresb[0].id, jugadoresb[0].nombre, jugadoresb[0].edad)
-    print("Jugador más veterano: ", jugadoresb[-1].id, jugadoresb[-1].nombre, jugadoresb[-1].edad)
+    print("Jugador mas joven: ", jugadoresb[0].id, jugadoresb[0].nombre, jugadoresb[0].edad)
+    print("Jugador mas veterano: ", jugadoresb[-1].id, jugadoresb[-1].nombre, jugadoresb[-1].edad)
 
 def edadPromedioTotal(jugadores_base):
     total = 0

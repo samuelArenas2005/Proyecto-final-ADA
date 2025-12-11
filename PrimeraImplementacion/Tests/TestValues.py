@@ -1,4 +1,4 @@
-DEPORTISTAS = [
+SPORTMEN = [
     "Samuel Arenas", "Valentina Ruiz", "Camilo Martinez",
     "Laura Sanchez", "Andres Gomez", "Mariana Torres",
     "Juan Perez", "Sofia Herrera", "Daniel Morales",
@@ -53,7 +53,7 @@ DEPORTISTAS = [
     "Elias Toro", "Ormelinda Salinas", "Olerys Velazquez"
 ]
 
-DEPORTES = [
+SPORT = [
     "Futbol", "Baloncesto", "Voleibol", "Tenis", "Natacion", "Atletismo", "Ciclismo",
     "Boxeo", "Rugby", "Beisbol", "Golf", "Taekwondo", "Judo", "Karate", "Esgrima", "Gimnasia Artistica",
     "Levantamiento de Pesas", "Skateboarding", "Surf", "Hockey sobre cesped",
@@ -64,7 +64,7 @@ DEPORTES = [
     "Esqui", "Snowboard", "Patinaje sobre hielo", "Curling"
 ]
 
-SEDES = [
+SITES = [
     "Bogota", "Medellin", "Cali", "Barranquilla", "Cartagena",
     "Bucaramanga", "Pereira", "Manizales", "Armenia", "Santa Marta",
     "Cucuta", "Ibague", "Pasto", "Villavicencio", "Monteria",

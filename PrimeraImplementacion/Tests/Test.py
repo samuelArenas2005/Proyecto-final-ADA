@@ -1,5 +1,15 @@
-from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort, ranking, rendimientosExtremos, rendimientoEquipos, edadesExtremos, rendimientoPromedioTotal, edadPromedioTotal
-from pruebas import generacionPruebasCompleta
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from PrimeraImplementacion.Models import (
+    ranckingSedes,ranking, rendimientosExtremos, rendimientoEquipos, edadesExtremos, rendimientoPromedioTotal, edadPromedioTotal
+)
+
+from TestGenerate import generacionPruebasCompleta
 
 
 # Ejemplo 1: Usar el método generacionPruebasCompleta para crear todo automáticamente
@@ -20,22 +30,11 @@ for jugador in jugadores_base:
     print(f"{jugador:<5} {deportista.nombre:<30} {deportista.edad:<8} {deportista.rendimiento:<10}")
 print("="*70 + "\n")
 
-# Calcular rendimientos y ordenar
-for sede in lista_de_sedes:
-    sede.calcularRendimientoPromedio()
 
-listasIdOrdenados = bucket_sort(lista_de_sedes, "rendimientoPromedio")
-
-print("=== RESULTADOS===\n")
-for sede in reversed(listasIdOrdenados):
-    print("Sede ", sede.nombre , ":\n")
-    listasIdOrdenadosEquipos = sede.obtenerListaOrdenadaPorRendimiento()
-    for equipo in reversed(listasIdOrdenadosEquipos):
-        listasIdOrdenadosDeportistas = equipo.obtenerListaOrdenadaPorRendimiento()
-        print("\t",equipo.deporte,": ", listasIdOrdenadosDeportistas, "\n")
-
-
+ranckingSedes(lista_de_sedes)
 ranking(jugadores_base)
+
+print("\nConsultas Solicitadas:\n")
 rendimientosExtremos(jugadores_base)
 rendimientoEquipos(lista_de_sedes)
 edadesExtremos(jugadores_base)

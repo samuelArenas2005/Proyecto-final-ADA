@@ -1,11 +1,21 @@
 import random
-from Modelos import Deportista,Equipo, Sede
-from valoresPruebas import DEPORTISTAS,DEPORTES,SEDES
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from PrimeraImplementacion.Models import (
+    Deportista,Equipo, Sede
+)
+
+from TestValues import *
 
 
 def generacionPruebasJugadoresBase(numeroDeportistas):
     jugadoresBase = {}
-    NombreDeportistas = DEPORTISTAS.copy()
+    NombreDeportistas = SPORTMEN.copy()
     
     for i in range(numeroDeportistas):
         posicionJugador = random.randint(0, len(NombreDeportistas) - 1)
@@ -23,36 +33,36 @@ def generacionPruebasSede(jugadoresBase, minDeportistasEquipo, maxDeportistasEqu
     lista_de_sedes = []
     indice_deportista = 0
     
-    # Mezclar aleatoriamente la lista de deportistas para una mejor distribución
+    # Mezclar aleatoriamente la lista de SPORTMEN para una mejor distribución
     random.shuffle(lista_deportistas)
     
     # Crear cada sede
     for num_sede in range(numeroSedes):
-        nombre_sede = SEDES[num_sede % len(SEDES)]  # Usar nombres disponibles cíclicamente
+        nombre_sede = SITES[num_sede % len(SITES)]  # Usar nombres disponibles cíclicamente
         
-        # Decidir aleatoriamente cuántos deportes tendrá esta sede
+        # Decidir aleatoriamente cuántos SPORT tendrá esta sede
         numero_deportes = random.randint(minDeportes, maxDeportes)
         equipos_sede = []
         
         # Crear equipos para esta sede
         for num_equipo in range(numero_deportes):
             # Seleccionar deporte
-            deporte = DEPORTES[num_equipo % len(DEPORTES)]
+            deporte = SPORT[num_equipo % len(SPORT)]
             
-            # Decidir cuántos deportistas en este equipo
+            # Decidir cuántos SPORTMEN en este equipo
             numero_deportistas_equipo = random.randint(minDeportistasEquipo, maxDeportistasEquipo)
             
-            # Recolectar deportistas para este equipo
+            # Recolectar SPORTMEN para este equipo
             deportistas_equipo = []
             for _ in range(numero_deportistas_equipo):
-                # Si se acaban los deportistas, no agregar más (evitar duplicados)
+                # Si se acaban los SPORTMEN, no agregar más (evitar duplicados)
                 if indice_deportista >= len(lista_deportistas):
                     break
                 
                 deportistas_equipo.append(lista_deportistas[indice_deportista])
                 indice_deportista += 1
             
-            # Solo crear el equipo si tiene deportistas
+            # Solo crear el equipo si tiene SPORTMEN
             if deportistas_equipo:
                 # Crear equipo
                 equipo = Equipo(deporte, deportistas_equipo)
@@ -72,10 +82,10 @@ def generacionPruebasSede(jugadoresBase, minDeportistasEquipo, maxDeportistasEqu
 def generacionPruebasCompleta(numeroDeportistas, minDeportistasEquipo, maxDeportistasEquipo,
                               minDeportes, maxDeportes, numeroSedes):
     
-    # Generar deportistas base
+    # Generar SPORTMEN base
     jugadores_base = generacionPruebasJugadoresBase(numeroDeportistas)
     
-    # Generar sedes con equipos distribuidos
+    # Generar SITES con equipos distribuidos
     lista_de_sedes = generacionPruebasSede(
         jugadores_base,
         minDeportistasEquipo,

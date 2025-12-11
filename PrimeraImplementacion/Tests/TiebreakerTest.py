@@ -1,4 +1,13 @@
-from Modelos import Deportista, Equipo, Sede, bucket_sort, counting_sort
+import sys
+from pathlib import Path
+
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from PrimeraImplementacion.Models import (
+    Deportista, Equipo, Sede, bucket_sort, counting_sort
+)
 
 # =============================================================================
 # PRUEBA 1: Desempate de EQUIPOS por cantidad de deportistas (bucket_sort)

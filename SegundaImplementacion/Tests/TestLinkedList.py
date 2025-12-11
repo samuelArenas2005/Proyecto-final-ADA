@@ -1,5 +1,19 @@
-from LinkedList import LinkedList, Node, LIST_INSERT, LIST_SEARCH, LIST_DELETE, LIST_MERGE_SORT, PRINT_LINKED_LIST
+import sys
+from pathlib import Path
 
+PROJECT_ROOT = Path(__file__).resolve().parents[2]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
+
+from SegundaImplementacion.LinkedList import (
+    LinkedList,
+    Node,
+    LIST_DELETE,
+    LIST_INSERT,
+    LIST_MERGE_SORT,
+    LIST_SEARCH,
+    PRINT_LINKED_LIST,
+)
 # Test 1: Inserción al inicio
 print("=" * 50)
 print("TEST 1: LIST_INSERT (insertar al inicio)")

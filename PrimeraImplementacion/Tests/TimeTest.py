@@ -1,6 +1,6 @@
 import time 
-from pruebas import generacionPruebasCompleta
-from Modelos import bucket_sort, counting_sort, counting_sortSimple, rendimientosExtremos, rendimientoEquipos, edadesExtremos, edadPromedioTotal, rendimientoPromedioTotal
+from TestGenerate import generacionPruebasCompleta
+from ..Models import bucket_sort, counting_sort, counting_sortSimple, rendimientosExtremos, rendimientoEquipos, edadesExtremos, edadPromedioTotal, rendimientoPromedioTotal
 
 def generarDatosSedes(n):
     jugadores_base, lista_de_sedes = generacionPruebasCompleta(
