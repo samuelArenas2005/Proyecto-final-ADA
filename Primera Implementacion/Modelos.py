@@ -1,6 +1,6 @@
 import math
 
-def counting_sort(arr, rendimientoName):
+def counting_sort(arr, criterionName):
     max_rendimiento = 100
     max_edad = 100
     
@@ -8,7 +8,7 @@ def counting_sort(arr, rendimientoName):
     
     # Agrupar elementos por rendimiento y edad
     for elemento in arr:
-        rendimiento = int(getattr(elemento, rendimientoName))
+        rendimiento = int(getattr(elemento, criterionName))
         edad = int(getattr(elemento, "edad"))
         
         count[rendimiento][edad].append(elemento)
@@ -21,14 +21,14 @@ def counting_sort(arr, rendimientoName):
     
     return output
 
-def counting_sortSimple(arr, rendimientoName):
+def counting_sortSimple(arr, criterionName):
     max_valor = 100
     
     count = [[] for _ in range(max_valor + 1)]
     
     # Agrupar elementos por el atributo especificado
     for elemento in arr:
-        valor = int(getattr(elemento, rendimientoName))
+        valor = int(getattr(elemento, criterionName))
         count[valor].append(elemento)
     
     output = []
@@ -38,13 +38,13 @@ def counting_sortSimple(arr, rendimientoName):
     
     return output
 
-def bucket_sort(arr,rendimientoName):
+def bucket_sort(arr,criterionName):
     NUM_CUBETAS = 10
     
     cubetas = [[] for _ in range(NUM_CUBETAS)]
     
     for elemento in arr:
-        rendimiento = getattr(elemento, rendimientoName)
+        rendimiento = getattr(elemento, criterionName)
         if rendimiento == 100.0:
             indice_cubeta = NUM_CUBETAS - 1
         else:
@@ -58,7 +58,7 @@ def bucket_sort(arr,rendimientoName):
     for i in range(NUM_CUBETAS):
         cubeta_actual = cubetas[i]
         # Ordenar por rendimiento ascendente, en caso de empate por cantidad de deportistas descendente
-        insertion_sort(cubeta_actual,rendimientoName)
+        insertion_sort(cubeta_actual,criterionName)
         
     arr_ordenado = []
     for cubeta in cubetas:
