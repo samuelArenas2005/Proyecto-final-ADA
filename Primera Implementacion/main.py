@@ -1,4 +1,4 @@
-from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort
+from Modelos import Deportista,Equipo, Sede,counting_sort,bucket_sort, ranking, rendimientosExtremos, rendimientoEquipos, edadesExtremos, rendimientoPromedioTotal, edadPromedioTotal
 from pruebas import generacionPruebasCompleta
 
 
@@ -33,3 +33,11 @@ for sede in reversed(listasIdOrdenados):
     for equipo in reversed(listasIdOrdenadosEquipos):
         listasIdOrdenadosDeportistas = equipo.obtenerListaOrdenadaPorRendimiento()
         print("\t",equipo.deporte,": ", listasIdOrdenadosDeportistas, "\n")
+
+
+ranking(jugadores_base)
+rendimientosExtremos(jugadores_base)
+rendimientoEquipos(lista_de_sedes)
+edadesExtremos(jugadores_base)
+edadPromedioTotal(jugadores_base)
+rendimientoPromedioTotal(jugadores_base)
