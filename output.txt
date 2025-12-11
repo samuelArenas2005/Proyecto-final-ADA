@@ -1,0 +1,21 @@
+Sede Cali, Rendimiento 58.66666666666667:
+		Volleyball, Rendimiento 47.666666666666664: {4, 6, 5}
+		Futbol, Rendimiento 69.66666666666667: {3, 2, 1}
+
+Sede Medellin, Rendimiento 75.66666666666666:
+		Futbol, Rendimiento 71.0: {7, 8, 9}
+		Volleyball, Rendimiento 80.33333333333333: {10, 11, 12}
+
+Ranking Jugadores por ids:
+{3, 4, 7, 10, 6, 5, 8, 11, 9, 2, 1, 12}
+
+Consultas Solicitadas:
+
+Equipo con mayor rendimiento: Volleyball de Sede Medellin.
+Equipo con menor rendimiento: Volleyball de Sede Cali.
+Jugador con mayor rendimiento: {12, Raul, 100}.
+Jugador con menor rendimiento: {3, Pedro, 21}.
+Jugador más joven: {1, Juan, 20}.
+Jugador más veterano: {12, Raul, 31}.
+Promedio de edad de los jugadores: 25.5
+Promedio del rendimiento de los jugadores: 67.16666666666667

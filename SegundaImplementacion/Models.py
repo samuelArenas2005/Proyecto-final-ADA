@@ -1,5 +1,5 @@
-import RBTree
-import LinkedList
+from . import RBTree
+from . import LinkedList
 
 #Implementa la clase Equipo, usa arboles roginegros para guardar a los deportistas
 class Team():
@@ -376,23 +376,27 @@ class List_of_Sites():
     
     def get_best_team_across_Sites(self):
         best_team = None
+        in_site = None
         current = self.sites.head
         while current is not None:
             site_best_team = current.data.get_best_team()
             if best_team is None or (site_best_team is not None and site_best_team.get_average_performance() > best_team.get_average_performance()):
                 best_team = site_best_team
+                in_site = current.data
             current = current.next
-        return best_team
+        return best_team, in_site
     
     def get_worst_team_across_Sites(self):
         worst_team = None
+        in_site = None
         current = self.sites.head
         while current is not None:
             site_worst_team = current.data.get_worst_team()
             if worst_team is None or (site_worst_team is not None and site_worst_team.get_average_performance() < worst_team.get_average_performance()):
                 worst_team = site_worst_team
+                in_site = current.data
             current = current.next
-        return worst_team
+        return worst_team, in_site
     
     def get_best_player_across_Sites(self):
         # Si ya tenemos el ranking global calculado, usar la cola (último = mejor performance)

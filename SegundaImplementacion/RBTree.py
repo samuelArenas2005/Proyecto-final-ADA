@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 from typing import Optional
-from SportsMan import SportsMan
+from .SportsMan import SportsMan
 
 """Implementación de un Árbol Rojinegro (Red-Black Tree)"""
 
