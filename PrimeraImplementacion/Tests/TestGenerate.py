@@ -15,15 +15,14 @@ from TestValues import *
 
 def generacionPruebasJugadoresBase(numeroDeportistas):
     jugadoresBase = {}
-    NombreDeportistas = SPORTMEN.copy()
-    
     for i in range(numeroDeportistas):
-        posicionJugador = random.randint(0, len(NombreDeportistas) - 1)
+        nombre = random.choice(FIRST_NAMES)
+        apellido = random.choice(LAST_NAMES)
+        nombre_completo = f"{nombre} {apellido}"
         edadJugador = random.randint(17, 45)
         rendimientoJugador = distribucionNormalDeRendimiento()
-        jugadoresBase[i+1] = Deportista((i+1), NombreDeportistas[posicionJugador], edadJugador, rendimientoJugador)
-        NombreDeportistas.pop(posicionJugador)
-    
+        jugadoresBase[i+1] = Deportista((i+1), nombre_completo, edadJugador, rendimientoJugador)
+
     return jugadoresBase
 
 def generacionPruebasSede(jugadoresBase, minDeportistasEquipo, maxDeportistasEquipo, 

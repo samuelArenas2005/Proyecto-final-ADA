@@ -23,7 +23,7 @@ def main() -> None:
         generate_output_second_implementation(input_path=input_path, output_path=OUTPUT_FILE)
     elif IMPLEMENTATION == "array":
         # Importar dinámicamente la primera implementación
-        primera_impl = import_module("Primera Implementacion.buildOutput")
+        primera_impl = import_module("PrimeraImplementacion.buildOutput")
         primera_impl.generate_output(input_path=input_path, output_path=OUTPUT_FILE)
     else:
         raise ValueError(

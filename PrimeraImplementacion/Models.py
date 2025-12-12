@@ -156,35 +156,54 @@ class Sede():
         return self.listasIdOrdenados
 
 
+def mostrarDeportistas(jugadores_base):
+    lines = []
+    lines.append("\n" + "="*70)
+    lines.append(f"{'ID':<5} {'Nombre':<30} {'Edad':<8} {'Rendimiento':<10}")
+    lines.append("="*70)
+    for jugador in sorted(jugadores_base.keys()):
+        deportista = jugadores_base[jugador]
+        lines.append(f"{jugador:<5} {deportista.nombre:<30} {deportista.edad:<8} {deportista.rendimiento:<10}")
+    lines.append("="*70 + "\n")
+    return lines
 
 #SOLUCIÓN DEL EJERICIO
 
 def ranckingSedes(lista_de_sedes):
-        # Calcular rendimientos y ordenar
+    # Calcular rendimientos y ordenar
     for sede in lista_de_sedes:
         sede.calcularRendimientoPromedio()
 
-    listasIdOrdenados = bucket_sort(lista_de_sedes, "rendimientoPromedio")
-
-    print("=== RESULTADOS===\n")
-    for sede in reversed(listasIdOrdenados):
-        print("Sede ", sede.nombre , ":\n")
-        listasIdOrdenadosEquipos = sede.obtenerListaOrdenadaPorRendimiento()
-        for equipo in reversed(listasIdOrdenadosEquipos):
-            listasIdOrdenadosDeportistas = equipo.obtenerListaOrdenadaPorRendimiento()
-            print("\t",equipo.deporte,": ", listasIdOrdenadosDeportistas, "\n")
+    sedes_ordenadas = bucket_sort(lista_de_sedes, "rendimientoPromedio")
+    
+    # Construir estructura de retorno
+    resultado = []
+    for sede in reversed(sedes_ordenadas):
+        equipos_organizados = sede.obtenerListaOrdenadaPorRendimiento()
+        equipos_con_deportistas = []
+        for equipo in reversed(equipos_organizados):
+            deportistas_ordenados = equipo.obtenerListaOrdenadaPorRendimiento()
+            equipos_con_deportistas.append({
+                'equipo': equipo,
+                'deportistas': deportistas_ordenados
+            })
+        resultado.append({
+            'sede': sede,
+            'equipos': equipos_con_deportistas
+        })
+    
+    return resultado
 
 def ranking(jugadores_base):
-    jugadoresb = counting_sort(list(jugadores_base.values()),"rendimiento")
-    ranking = []
-    for jugadores in jugadoresb:
-        ranking.append(jugadores.id)
-    print("Ranking de jugadores por rendimiento",ranking)
+    jugadoresb = counting_sort(list(jugadores_base.values()), "rendimiento")
+    ranking = [jug.id for jug in jugadoresb]
+    return ranking
 
 def rendimientosExtremos(jugadores_base):  
-    jugadoresb = counting_sort(list(jugadores_base.values()),"rendimiento")
-    print("Jugador con menor rendimiento: ", jugadoresb[0].id, jugadoresb[0].nombre, jugadoresb[0].rendimiento)
-    print("Jugador con mayor rendimiento: ", jugadoresb[-1].id, jugadoresb[-1].nombre, jugadoresb[-1].rendimiento)
+    jugadoresb = counting_sort(list(jugadores_base.values()), "rendimiento")
+    menor = jugadoresb[0]
+    mayor = jugadoresb[-1]
+    return menor, mayor
 
 def rendimientoEquipos(sedes):
     todos_los_equipos = []
@@ -192,26 +211,25 @@ def rendimientoEquipos(sedes):
         todos_los_equipos.extend(sede.equipos)
     equipos_ordenados = bucket_sort(todos_los_equipos, "rendimientoPromedio")
     equipo_menor = equipos_ordenados[0]
-    print(f"Equipo con MENOR rendimiento: {equipo_menor.deporte} - Sede: {equipo_menor.sede.nombre} (Rendimiento: {equipo_menor.rendimientoPromedio:.2f})")
-
     equipo_mayor = equipos_ordenados[-1]
-    print(f"Equipo con MAYOR rendimiento: {equipo_mayor.deporte} - Sede: {equipo_mayor.sede.nombre} (Rendimiento: {equipo_mayor.rendimientoPromedio:.2f})")
+    return equipo_menor, equipo_mayor
 
 def edadesExtremos(jugadores_base):  
-    jugadoresb = counting_sortSimple(list(jugadores_base.values()),"edad")
-    print("Jugador mas joven: ", jugadoresb[0].id, jugadoresb[0].nombre, jugadoresb[0].edad)
-    print("Jugador mas veterano: ", jugadoresb[-1].id, jugadoresb[-1].nombre, jugadoresb[-1].edad)
+    jugadoresb = counting_sortSimple(list(jugadores_base.values()), "edad")
+    mas_joven = jugadoresb[0]
+    mas_viejo = jugadoresb[-1]
+    return mas_joven, mas_viejo
 
 def edadPromedioTotal(jugadores_base):
     total = 0
     for jugador in jugadores_base.values():
         total += jugador.edad
     promedio = total / len(jugadores_base)
-    print(f"Edad promedio total de los deportistas: {promedio:.2f}")
+    return promedio
     
 def rendimientoPromedioTotal(jugadores_base):
     total = 0
     for jugador in jugadores_base.values():
         total += jugador.rendimiento
     promedio = total / len(jugadores_base)
-    print(f"Rendimiento promedio total de los deportistas: {promedio:.2f}")
+    return promedio
