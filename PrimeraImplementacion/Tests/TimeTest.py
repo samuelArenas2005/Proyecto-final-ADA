@@ -67,7 +67,7 @@ def algoritmoRendimientoPromedioTotal(datos):
     rendimientoPromedioTotal(datos)
 
 
-def medir_tiempo(algoritmo, datos, repeticiones=5000): 
+def medir_tiempo(algoritmo, datos): 
     inicio = time.perf_counter()
     algoritmo(datos)
     fin = time.perf_counter()
@@ -157,7 +157,7 @@ def prueba_ordenar_jugadores(color_real='purple', color_teorica='gray'):
 
 def prueba_ranking_jugadores(color_real='green', color_teorica='red'):
     resultados = correrPruebas(algoritmoRanking, generarDatosJugadores, tamanoJugadores)
-    teorica = [K3 * n for n in tamanoJugadores]
+    teorica = [ K3* n for n in tamanoJugadores]
     print("\nTiempos realizando el ranking de todos los jugadores en distintos tamaños")
     print(resultados)
     graficaComparativa(tamanoJugadores, resultados, teorica, color_real, color_teorica)
@@ -229,4 +229,4 @@ def run_prueba(numero):
 
 
 
-run_prueba(8)
+run_prueba(4)

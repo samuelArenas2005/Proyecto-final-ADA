@@ -161,7 +161,7 @@ def mostrarDeportistas(jugadores_base):
     lines.append("\n" + "="*70)
     lines.append(f"{'ID':<5} {'Nombre':<30} {'Edad':<8} {'Rendimiento':<10}")
     lines.append("="*70)
-    for jugador in sorted(jugadores_base.keys()):
+    for jugador in jugadores_base.keys():
         deportista = jugadores_base[jugador]
         lines.append(f"{jugador:<5} {deportista.nombre:<30} {deportista.edad:<8} {deportista.rendimiento:<10}")
     lines.append("="*70 + "\n")
