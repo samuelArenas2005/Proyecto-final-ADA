@@ -96,65 +96,61 @@ def GET_MIDDLE(head: Node) -> Node:
     
     return slow
 
-def MERGE(left: Node, right: Node) -> Node:
-    """Combina dos listas ordenadas en una sola lista ordenada"""
+def MERGE(left: Node, right: Node, isSportsMan=False) -> Node:
+    """Combina dos listas ordenadas en una sola lista ordenada (versión iterativa)"""
     if left is None:
         return right
     if right is None:
         return left
     
-    result = None
-    
+    # Determinar el primer nodo
     if left.key < right.key:
         result = left
-        result.next = MERGE(left.next, right)
-        if result.next is not None:
-            result.next.prev = result
-        result.prev = None
+        left = left.next
     elif left.key > right.key:
         result = right
-        result.next = MERGE(left, right.next)
-        if result.next is not None:
-            result.next.prev = result
-        result.prev = None
+        right = right.next
     else:  # left.key == right.key
-        # Si las llaves son iguales, comparar por número de jugadores
-        if left.data.get_number_of_sportsmen() >= right.data.get_number_of_sportsmen():
+        tie_breaker = left.data.get_number_of_sportsmen() >= right.data.get_number_of_sportsmen() if not isSportsMan else left.data.age >= right.data.age
+        if tie_breaker:
             result = left
-            result.next = MERGE(left.next, right)
-            if result.next is not None:
-                result.next.prev = result
-            result.prev = None
+            left = left.next
         else:
             result = right
-            result.next = MERGE(left, right.next)
-            if result.next is not None:
-                result.next.prev = result
-            result.prev = None
+            right = right.next
     
-    return result
-
-def MERGE_SIMPLE(left: Node, right: Node) -> Node:
-    """Combina dos listas ordenadas sin criterio de desempate adicional"""
-    if left is None:
-        return right
-    if right is None:
-        return left
+    result.prev = None
+    current = result
     
-    result = None
+    # Merge iterativo
+    while left is not None and right is not None:
+        if left.key < right.key:
+            current.next = left
+            left.prev = current
+            left = left.next
+        elif left.key > right.key:
+            current.next = right
+            right.prev = current
+            right = right.next
+        else:  # left.key == right.key
+            tie_breaker = left.data.get_number_of_sportsmen() >= right.data.get_number_of_sportsmen() if not isSportsMan else left.data.age >= right.data.age
+            if tie_breaker:
+                current.next = left
+                left.prev = current
+                left = left.next
+            else:
+                current.next = right
+                right.prev = current
+                right = right.next
+        current = current.next
     
-    if left.key <= right.key:
-        result = left
-        result.next = MERGE_SIMPLE(left.next, right)
-        if result.next is not None:
-            result.next.prev = result
-        result.prev = None
-    else:
-        result = right
-        result.next = MERGE_SIMPLE(left, right.next)
-        if result.next is not None:
-            result.next.prev = result
-        result.prev = None
+    # Agregar los nodos restantes
+    if left is not None:
+        current.next = left
+        left.prev = current
+    elif right is not None:
+        current.next = right
+        right.prev = current
     
     return result
 
@@ -173,7 +169,7 @@ def MERGE_K_LISTS(lists: list) -> LinkedList:
     right = MERGE_K_LISTS(lists[mid:])
     
     # Merge de las dos mitades
-    merged_head = MERGE_SIMPLE(left.head, right.head)
+    merged_head = MERGE(left.head, right.head, isSportsMan=True)
     
     # Crear nueva lista con el resultado
     result = LinkedList()
