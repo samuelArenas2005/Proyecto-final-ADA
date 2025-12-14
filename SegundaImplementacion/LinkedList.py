@@ -155,7 +155,6 @@ def MERGE(left: Node, right: Node, isSportsMan=False) -> Node:
     return result
 
 def MERGE_K_LISTS(lists: list) -> LinkedList:
-    """Merge de k listas enlazadas ordenadas usando divide y vencerás - O(n log k)"""
     if not lists:
         result = LinkedList()
         return result
@@ -185,7 +184,6 @@ def MERGE_K_LISTS(lists: list) -> LinkedList:
     return result
 
 def COPY_LINKED_LIST(original: LinkedList) -> LinkedList:
-    """Crea una copia profunda de una lista enlazada - O(n)"""
     if original is None or original.head is None:
         return LinkedList()
     

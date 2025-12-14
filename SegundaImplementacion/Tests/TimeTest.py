@@ -198,4 +198,4 @@ def run_prueba(numero):
     else:
         print(f"Prueba {numero} no definida. Revisa la tabla de pruebas disponibles.")
 
-run_prueba(2)
+run_prueba(7)
