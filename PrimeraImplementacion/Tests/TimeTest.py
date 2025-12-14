@@ -81,7 +81,7 @@ referenciaCambioSedes = [100,500,800,1000,1400,1800]
 tamanosCambiandoEquipos = [(50000, 2, 6, 2, 4, 10), (50000, 2, 6, 5, 10, 10), (50000, 2, 6, 10, 20, 10), (50000, 2, 6, 15, 30, 10), (50000, 2, 6, 20, 40, 10), (50000, 2, 6, 25, 50, 10)]
 referenciaCambioEquipos = [4, 10, 20, 30, 40, 50]
 
-tamanosCambiandoJugadores = [(100, 2, 6, 2, 4, 5), (1000, 2, 6, 2, 4, 10), (5000, 2, 6, 2, 4, 10), (100000, 2, 6, 2, 4, 10), (200000, 2, 6, 2, 4, 10), (500000, 2, 6, 2, 4, 10)]
+tamanosCambiandoJugadores = [(100, 2, 6, 2, 4, 5), (1000, 2, 10, 2, 10, 10), (5000, 2, 30, 2, 40, 10), (100000, 2, 450, 2, 40, 10), (200000, 2, 250, 2, 100, 10), (500000, 2, 300, 2, 100, 20)]
 referenciaCambioJugadores = [100, 1000, 5000, 100000, 200000, 500000]
 
 tamanoJugadores = [100,1000,2000,5000,100000,200000,400000,500000]
@@ -149,7 +149,7 @@ def prueba_ordenar_equipos(color_real='blue', color_teorica='orange'):
 
 def prueba_ordenar_jugadores(color_real='purple', color_teorica='gray'):
     resultados = correrPruebas(algoritmoOrdernarSedes, generarDatosSedes, tamanosCambiandoJugadores)
-    teorica = [K2 * n for n in referenciaCambioJugadores]
+    teorica = [K4 * n for n in referenciaCambioJugadores]
     print("\nTiempos realizando el ordenamiento de las sedes en distintos números de jugadores")
     print(resultados)
     graficaComparativa(referenciaCambioJugadores, resultados, teorica, color_real, color_teorica)
@@ -229,4 +229,4 @@ def run_prueba(numero):
 
 
 
-run_prueba(4)
+run_prueba(3)

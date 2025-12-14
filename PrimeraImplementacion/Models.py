@@ -177,10 +177,10 @@ def ranckingSedes(lista_de_sedes):
     
     # Construir estructura de retorno
     resultado = []
-    for sede in reversed(sedes_ordenadas):
+    for sede in sedes_ordenadas:
         equipos_organizados = sede.obtenerListaOrdenadaPorRendimiento()
         equipos_con_deportistas = []
-        for equipo in reversed(equipos_organizados):
+        for equipo in equipos_organizados:
             deportistas_ordenados = equipo.obtenerListaOrdenadaPorRendimiento()
             equipos_con_deportistas.append({
                 'equipo': equipo,

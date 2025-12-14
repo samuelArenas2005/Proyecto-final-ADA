@@ -42,11 +42,11 @@ def build_output(lista_de_sedes: List[Models.Sede]) -> List[str]:
     lines.append("=== RESULTADOS===")
     for item_sede in resultados_sedes:
         sede = item_sede['sede']
-        lines.append(f"Sede {sede.nombre}:")
+        lines.append(f"Sede {sede.nombre} ({sede.rendimientoPromedio}):")
         for item_equipo in item_sede['equipos']:
             equipo = item_equipo['equipo']
             deportistas = item_equipo['deportistas']
-            lines.append(f"\t{equipo.deporte}: {deportistas}")
+            lines.append(f"\t{equipo.deporte} ({equipo.rendimientoPromedio}): {deportistas}")
         lines.append("")
 
     # Ranking de jugadores usando método de Models

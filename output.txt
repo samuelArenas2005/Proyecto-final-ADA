@@ -17,13 +17,13 @@ ID    Nombre                         Edad     Rendimiento
 ======================================================================
 
 === RESULTADOS===
-Sede Sede Medellin:
-	Volleyball: [10, 11, 12]
-	Futbol: [7, 8, 9]
+Sede Sede Cali (58.66666666666667):
+	Volleyball (47.666666666666664): [4, 6, 5]
+	Futbol (69.66666666666667): [3, 2, 1]
 
-Sede Sede Cali:
-	Futbol: [3, 2, 1]
-	Volleyball: [4, 6, 5]
+Sede Sede Medellin (75.66666666666666):
+	Futbol (71.0): [7, 8, 9]
+	Volleyball (80.33333333333333): [10, 11, 12]
 
 
 Ranking Jugadores por ids:
