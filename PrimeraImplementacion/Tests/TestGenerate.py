@@ -14,21 +14,21 @@ from TestValues import *
 
 
 def generacionPruebasJugadoresBase(numeroDeportistas):
-    jugadoresBase = {}
+    jugadoresBase = [None] * numeroDeportistas
     for i in range(numeroDeportistas):
         nombre = random.choice(FIRST_NAMES)
         apellido = random.choice(LAST_NAMES)
         nombre_completo = f"{nombre} {apellido}"
         edadJugador = random.randint(17, 45)
         rendimientoJugador = distribucionNormalDeRendimiento()
-        jugadoresBase[i+1] = Deportista((i+1), nombre_completo, edadJugador, rendimientoJugador)
+        jugadoresBase[i] = Deportista((i+1), nombre_completo, edadJugador, rendimientoJugador)
 
     return jugadoresBase
 
 def generacionPruebasSede(jugadoresBase, minDeportistasEquipo, maxDeportistasEquipo, 
                           minDeportes, maxDeportes, numeroSedes):
     
-    lista_deportistas = list(jugadoresBase.values())
+    lista_deportistas = jugadoresBase
     lista_de_sedes = []
     indice_deportista = 0
     

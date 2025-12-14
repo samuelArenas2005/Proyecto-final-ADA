@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Dict
+from typing import List
 from . import Models
 
 
@@ -27,12 +27,12 @@ def build_output(lista_de_sedes: List[Models.Sede]) -> List[str]:
     """Construye la salida formateada a partir de las sedes usando métodos de Models."""
     lines: List[str] = []
 
-    # Recolectar todos los deportistas
-    todos_los_deportistas: Dict[int, Models.Deportista] = {}
+    # Recolectar todos los deportistas (usando lista en lugar de diccionario)
+    todos_los_deportistas: List[Models.Deportista] = []
     for sede in lista_de_sedes:
         for equipo in sede.equipos:
             for deportista in equipo.deportistas:
-                todos_los_deportistas[deportista.id] = deportista
+                todos_los_deportistas.append(deportista)
 
     # Mostrar deportistas usando el método de Models
     lines.extend(Models.mostrarDeportistas(todos_los_deportistas))
@@ -42,11 +42,11 @@ def build_output(lista_de_sedes: List[Models.Sede]) -> List[str]:
     lines.append("=== RESULTADOS===")
     for item_sede in resultados_sedes:
         sede = item_sede['sede']
-        lines.append(f"Sede {sede.nombre}:")
+        lines.append(f"Sede {sede.nombre} ({sede.rendimientoPromedio}):")
         for item_equipo in item_sede['equipos']:
             equipo = item_equipo['equipo']
             deportistas = item_equipo['deportistas']
-            lines.append(f"\t{equipo.deporte}: {deportistas}")
+            lines.append(f"\t{equipo.deporte} ({equipo.rendimientoPromedio}): {deportistas}")
         lines.append("")
 
     # Ranking de jugadores usando método de Models

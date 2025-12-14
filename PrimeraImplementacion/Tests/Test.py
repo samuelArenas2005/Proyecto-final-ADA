@@ -16,12 +16,12 @@ from TestGenerate import generacionPruebasCompleta
 
 # Ejemplo 1: Usar el método generacionPruebasCompleta para crear todo automáticamente
 jugadores_base, lista_de_sedes = generacionPruebasCompleta(
-    numeroDeportistas=10,          # Número de deportistas a generar
+    numeroDeportistas=20,          # Número de deportistas a generar
     minDeportistasEquipo=2,         # Mínimo de deportistas por equipo
-    maxDeportistasEquipo=6,         # Máximo de deportistas por equipo
+    maxDeportistasEquipo=4,         # Máximo de deportistas por equipo
     minDeportes=2,                  # Mínimo de deportes por sede
-    maxDeportes=5,                  # Máximo de deportes por sede
-    numeroSedes=2                  # Número de sedes
+    maxDeportes=4,                  # Máximo de deportes por sede
+    numeroSedes=4                   # Número de sedes
 )
 
 # Mostrar deportistas
@@ -34,11 +34,11 @@ resultados_sedes = ranckingSedes(lista_de_sedes)
 print("=== RESULTADOS===")
 for item_sede in resultados_sedes:
     sede = item_sede['sede']
-    print(f"Sede {sede.nombre}:")
+    print(f"Sede {sede.nombre} ({sede.rendimientoPromedio}): ")
     for item_equipo in item_sede['equipos']:
         equipo = item_equipo['equipo']
         deportistas = item_equipo['deportistas']
-        print(f"\t{equipo.deporte}: {deportistas}")
+        print(f"\t{equipo.deporte} ({equipo.rendimientoPromedio}) : {deportistas}")
     print()
 
 # Ranking de jugadores
