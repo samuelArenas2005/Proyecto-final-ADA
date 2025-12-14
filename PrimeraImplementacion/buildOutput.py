@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import List, Dict
+from typing import List
 from . import Models
 
 
@@ -27,12 +27,12 @@ def build_output(lista_de_sedes: List[Models.Sede]) -> List[str]:
     """Construye la salida formateada a partir de las sedes usando métodos de Models."""
     lines: List[str] = []
 
-    # Recolectar todos los deportistas
-    todos_los_deportistas: Dict[int, Models.Deportista] = {}
+    # Recolectar todos los deportistas (usando lista en lugar de diccionario)
+    todos_los_deportistas: List[Models.Deportista] = []
     for sede in lista_de_sedes:
         for equipo in sede.equipos:
             for deportista in equipo.deportistas:
-                todos_los_deportistas[deportista.id] = deportista
+                todos_los_deportistas.append(deportista)
 
     # Mostrar deportistas usando el método de Models
     lines.extend(Models.mostrarDeportistas(todos_los_deportistas))

@@ -161,9 +161,8 @@ def mostrarDeportistas(jugadores_base):
     lines.append("\n" + "="*70)
     lines.append(f"{'ID':<5} {'Nombre':<30} {'Edad':<8} {'Rendimiento':<10}")
     lines.append("="*70)
-    for jugador in jugadores_base.keys():
-        deportista = jugadores_base[jugador]
-        lines.append(f"{jugador:<5} {deportista.nombre:<30} {deportista.edad:<8} {deportista.rendimiento:<10}")
+    for jugador in jugadores_base:
+        lines.append(f"{jugador.id:<5} {jugador.nombre:<30} {jugador.edad:<8} {jugador.rendimiento:<10}")
     lines.append("="*70 + "\n")
     return lines
 
@@ -195,12 +194,12 @@ def ranckingSedes(lista_de_sedes):
     return resultado
 
 def ranking(jugadores_base):
-    jugadoresb = counting_sort(list(jugadores_base.values()), "rendimiento")
+    jugadoresb = counting_sort(jugadores_base, "rendimiento")
     ranking = [jug.id for jug in jugadoresb]
     return ranking
 
 def rendimientosExtremos(jugadores_base):  
-    jugadoresb = counting_sort(list(jugadores_base.values()), "rendimiento")
+    jugadoresb = counting_sort(jugadores_base, "rendimiento")
     menor = jugadoresb[0]
     mayor = jugadoresb[-1]
     return menor, mayor
@@ -215,21 +214,21 @@ def rendimientoEquipos(sedes):
     return equipo_menor, equipo_mayor
 
 def edadesExtremos(jugadores_base):  
-    jugadoresb = counting_sortSimple(list(jugadores_base.values()), "edad")
+    jugadoresb = counting_sortSimple(jugadores_base, "edad")
     mas_joven = jugadoresb[0]
     mas_viejo = jugadoresb[-1]
     return mas_joven, mas_viejo
 
 def edadPromedioTotal(jugadores_base):
     total = 0
-    for jugador in jugadores_base.values():
+    for jugador in jugadores_base:
         total += jugador.edad
     promedio = total / len(jugadores_base)
     return promedio
     
 def rendimientoPromedioTotal(jugadores_base):
     total = 0
-    for jugador in jugadores_base.values():
+    for jugador in jugadores_base:
         total += jugador.rendimiento
     promedio = total / len(jugadores_base)
     return promedio
