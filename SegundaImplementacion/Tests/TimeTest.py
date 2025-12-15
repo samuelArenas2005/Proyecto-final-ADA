@@ -210,7 +210,7 @@ def graficar_resultados(eje_x, tiempos_reales, tiempos_teoricos, titulo, label_x
 # Si la línea roja sale muy arriba o muy abajo, modifica estos valores.
 K_NLOGN = 0.00000008  # Para algoritmos O(N log N)
 K_N = 0.0000005       # Para algoritmos Lineales O(N)
-K_SEDES = 0.0001      # Para algoritmos dependientes de Sedes
+K_SEDES = 0.00002      # Para algoritmos dependientes de Sedes
 K_EQUIPOS = 0.0001    # Para algoritmos dependientes de Equipos
 
 def run_prueba(numero):
