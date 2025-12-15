@@ -7,9 +7,9 @@ INPUT_DIR = PROJECT_ROOT / "input"
 OUTPUT_FILE = PROJECT_ROOT / "output.txt"
 
 # Cambia este valor a "input2.txt" (o cualquier otro) cuando quieras probar otro archivo.
-INPUT_FILENAME = "input1.txt"
+INPUT_FILENAME = "input3.txt"
 
-IMPLEMENTATION = "array"  # Cambia a "red_&_black_tree" para usar la segunda implementación
+IMPLEMENTATION = "red_&_black_tree"  # Cambia a "red_&_black_tree" para usar la segunda implementación
 
 
 def main() -> None:
