@@ -41,11 +41,12 @@ from TestGenerate import (
 # - Cambia el ÚLTIMO número (10, 50, 100...) para variar las sedes.
 # - Ajusta los rangos de equipos (posiciones 3 y 4) para que los datos quepan.
 tamanosCambiandoSedes = [
+    # (Total, MinJug, MaxJug, MinEq, MaxEq, SEDES)
     (50000, 10, 20, 10, 30, 10), 
     (50000, 10, 20, 10, 30, 50),
-    (50000, 10, 20, 10, 30, 100),
-    (50000, 5, 15, 5, 10, 500),
-    (50000, 2, 5, 2, 5, 1000)
+    (50000, 5, 15, 5, 15, 100),
+    (50000, 4, 10, 4, 10, 500),
+    (50000, 4, 6, 8, 12, 1000) 
 ]
 # Eje X de la gráfica para este escenario:
 referenciaCambioSedes = [10, 50, 100, 500, 1000]
