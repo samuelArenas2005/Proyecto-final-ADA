@@ -1,0 +1,102 @@
+
+======================================================================
+ID    Nombre                         Edad     Rendimiento
+======================================================================
+16    Maria Gonzalez                 28       65        
+2     Alejandro Torres               27       24        
+40    Elena Cruz                     27       41        
+49    Alberto Mendoza                30       66        
+17    Carlos Lopez                   19       72        
+9     Isabella Diaz                  40       92        
+18    Valeria Martinez               21       45        
+26    Fernanda Ortiz                 26       33        
+38    Lucia Alvarez                  19       49        
+50    Patricia Guzman                42       37        
+51    Eduardo Alvarez                22       78        
+1     Sofia Garcia                   21       66        
+27    Pablo Ramirez                  27       65        
+39    Rodrigo Martinez               28       63        
+54    Veronica Castillo              25       45        
+10    Daniel Ruiz                    17       57        
+19    Andres Perez                   30       78        
+33    Leonardo Delgado               22       54        
+48    Alicia Ortega                  26       66        
+15    Santiago Rodriguez             23       32        
+20    Sara Hernandez                 22       56        
+37    Miguel Diaz                    21       77        
+59    Hector Peña                    28       76        
+7     Camila Fernandez               24       36        
+30    Victoria Leon                  25       59        
+42    Paula Garcia                   28       88        
+45    Martin Fernandez               21       83        
+13    William Hernandez              30       44        
+31    Emilio Molina                  19       46        
+41    Manuel Silva                   23       61        
+60    Diana Herrera                  26       11        
+6     Sebastian Perez                25       42        
+22    Gabriela Ramos                 24       43        
+29    Ricardo Ruiz                   30       52        
+14    Laura Perez                    20       78        
+35    Oscar Gutierrez                26       60        
+43    Jorge Torres                   27       47        
+55    Raul Romero                    27       88        
+23    Adrian Torres                  22       15        
+5     Martina Martinez               30       55        
+34    Rosa Moreno                    23       68        
+44    Carolina Ramirez               25       69        
+56    Carmen Martinez                30       84        
+25    Ivan Vargas                    29       84        
+8     Mateo Gonzalez                 29       89        
+32    Andrea Herrera                 20       75        
+58    Ana Campos                     29       12        
+4     Juan Lopez                     22       78        
+21    Diego Castro                   23       67        
+52    Teresa Morales                 29       14        
+11    Luciana Sanchez                18       89        
+46    Sofia Ruiz                     39       34        
+53    Luis Gutierrez                 36       57        
+24    Natalia Gomez                  21       39        
+12    Lucas Vasquez                  26       82        
+28    Julia Sanchez                  28       79        
+57    Marcos Soto                    32       62        
+3     Valentina Rodriguez            19       15        
+36    Daniela Romero                 24       58        
+47    Antonio Vasquez                28       73        
+======================================================================
+
+=== RESULTADOS===
+Sede Sede Medellin (56.05666666666667):
+	Basketball (37.0): [60, 6, 22, 29]
+	Volleyball (50.333333333333336): [13, 31, 41]
+	Natacion (58.2): [23, 5, 34, 44, 56]
+	Futbol (66.5): [7, 30, 45, 42]
+	Tenis (68.25): [43, 35, 14, 55]
+
+Sede Sede Cali (58.15):
+	Futbol (49.0): [2, 40, 16, 49]
+	Volleyball (58.0): [26, 50, 18, 38, 17, 51, 9]
+	Basketball (59.75): [54, 39, 27, 1]
+	Natacion (60.25): [15, 20, 59, 37]
+	Tenis (63.75): [33, 10, 48, 19]
+
+Sede Sede Bogota (58.43333333333334):
+	Natacion (48.666666666666664): [3, 36, 47]
+	Volleyball (53.0): [52, 21, 4]
+	Basketball (60.0): [46, 53, 11]
+	Futbol (65.0): [58, 32, 25, 8]
+	Tenis (65.5): [24, 57, 28, 12]
+
+
+Ranking Jugadores por ids:
+[60, 58, 52, 23, 3, 2, 15, 26, 46, 7, 50, 24, 40, 6, 22, 13, 54, 18, 31, 43, 38, 29, 33, 5, 20, 53, 10, 36, 30, 35, 41, 57, 39, 16, 27, 49, 48, 1, 21, 34, 44, 17, 47, 32, 59, 37, 19, 51, 4, 14, 28, 12, 45, 56, 25, 42, 55, 8, 11, 9]
+
+Consultas Solicitadas:
+
+Equipo con mayor rendimiento: Tenis de Sede Medellin.
+Equipo con menor rendimiento: Basketball de Sede Medellin.
+Jugador con mayor rendimiento: {9, Isabella Diaz, 92}.
+Jugador con menor rendimiento: {60, Diana Herrera, 11}.
+Jugador más joven: {10, Daniel Ruiz, 17}.
+Jugador más veterano: {50, Patricia Guzman, 42}.
+Promedio de edad de los jugadores: 25.80
+Promedio del rendimiento de los jugadores: 57.88
