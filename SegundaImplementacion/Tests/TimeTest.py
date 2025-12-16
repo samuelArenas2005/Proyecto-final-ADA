@@ -211,7 +211,7 @@ def graficar_resultados(eje_x, tiempos_reales, tiempos_teoricos, titulo, label_x
 K_NLOGN = 0.00000008  # Para algoritmos O(N log N)
 K_N = 0.0000005       # Para algoritmos Lineales O(N)
 K_SEDES = 0.00002      # Para algoritmos dependientes de Sedes
-K_EQUIPOS = 0.0001    # Para algoritmos dependientes de Equipos
+K_EQUIPOS = 0.001    # Para algoritmos dependientes de Equipos
 
 def run_prueba(numero):
     """
@@ -286,4 +286,4 @@ if __name__ == "__main__":
     # Cambia el número dentro de run_prueba() para seleccionar qué gráfica generar.
     # Ejemplo: run_prueba(1) generará la gráfica de N log N.
     
-    run_prueba(3)
+    run_prueba(5)
