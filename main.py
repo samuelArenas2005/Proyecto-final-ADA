@@ -8,7 +8,7 @@ INPUT_DIR = PROJECT_ROOT / "input"
 OUTPUT_FILE = PROJECT_ROOT / "output.txt"
 
 # Cambia este valor a "input2.txt" (o cualquier otro) cuando quieras probar otro archivo.
-INPUT_FILENAME = "input3.txt"
+INPUT_FILENAME = "input7.txt"
 
 IMPLEMENTATION = "array"  # Cambia a "red_&_black_tree" para usar la segunda implementación
 

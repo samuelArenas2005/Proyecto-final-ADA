@@ -4,7 +4,7 @@ import math
 
 def counting_sort(arr, criterioName):
     max_rendimiento = 100
-    max_edad = 100
+    max_edad = 50
     
     count = [[[] for _ in range(max_edad + 1)] for _ in range(max_rendimiento + 1)]
     
