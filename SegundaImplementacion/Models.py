@@ -239,12 +239,12 @@ class Site():
     
     
     def get_worst_team(self):
-        if self.teams.tail is not None:
+        if self.teams.head is not None:
             return self.teams.head.data
         return None
     
     def get_best_team(self):
-        if self.teams.head is not None:
+        if self.teams.tail is not None:
             return self.teams.tail.data
         return None
     

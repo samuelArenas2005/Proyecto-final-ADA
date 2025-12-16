@@ -19,6 +19,9 @@ def LIST_INSERT(L: LinkedList, x: Node):
     x.next = L.head
     if L.head != None:
         L.head.prev = x
+    else:
+        # Si la lista estaba vacía, el nuevo nodo es también el tail
+        L.tail = x
     L.head = x
     x.prev = None
 
