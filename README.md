@@ -120,21 +120,35 @@ python main.py
 El resultado se guardará automáticamente en el archivo `output.txt`.
 
 ---
+## 🧪 Ejecución de Pruebas (Tests)
 
-## 📊 Pruebas de Rendimiento
+El proyecto incluye dos tipos de pruebas que se pueden ejecutar directamente desde la consola para validar cada implementación por separado.
 
-Cada implementación incluye pruebas para validar su complejidad temporal.
+- **Pruebas Funcionales (`Test.py` / `test.py`):** Imprimen en la terminal la lista de sedes, equipos, rankings y consultas para verificar que la lógica funciona correctamente.
+- **Pruebas de Rendimiento (`TimeTest.py`):** Miden el tiempo de ejecución y generan gráficas comparativas entre la complejidad teórica \(O(n)\) y el comportamiento real.
 
 ---
 
-### 📈 Primera Implementación (Arreglos)
+### 🔹 Primera Implementación (Arreglos)
+
+#### 📁 Navegar a la carpeta de pruebas
 
 ```bash
 cd PrimeraImplementacion/Tests
-python TimeTest.py
+````
+
+#### ▶️ Opción A: Ver funcionamiento en consola
+
+Ejecuta el script para ver cómo se generan los datos aleatorios y se calculan los rankings:
+
+```bash
+python Test.py
 ```
 
-Selecciona la prueba en `run_prueba(X)`:
+#### 📈 Opción B: Generar gráficas de rendimiento
+
+1. Abre el archivo `TimeTest.py`.
+2. Al final del archivo, modifica el valor en `run_prueba(X)` (del 1 al 9).
 
 | Código | Descripción                                |
 | ------ | ------------------------------------------ |
@@ -142,25 +156,48 @@ Selecciona la prueba en `run_prueba(X)`:
 | 4      | Ranking global                             |
 | 5–9    | Consultas extremas y promedios             |
 
----
-
-### 📉 Segunda Implementación (Árboles Rojinegros)
+4. Ejecuta el script:
 
 ```bash
-cd SegundaImplementacion/Tests
 python TimeTest.py
 ```
 
-Selecciona la prueba en `run_prueba(X)`:
-
-| Código | Descripción      | Complejidad Aprox. |
-| ------ | ---------------- | ------------------ |
-| 1      | Ranking global   | O(N log N)         |
-| 2      | Promedios        | O(N)               |
-| 3      | Sedes            | O(k log k + km)    |
-| 4      | Jugador extremo  | Eficiente (~O(1))  |
-| 5      | Equipos por sede | O(m log m + mn)    |
 ---
+
+### 🔸 Segunda Implementación (Árboles Rojinegros)
+
+#### 📁 Navegar a la carpeta de pruebas
+
+```bash
+cd SegundaImplementacion/Tests
+```
+
+#### ▶️ Opción A: Ver funcionamiento en consola
+
+Ejecuta el script para ver la estructura jerárquica y las consultas en tiempo real:
+
+```bash
+python test.py
+```
+
+#### 📉 Opción B: Generar gráficas de rendimiento
+
+1. Abre el archivo `TimeTest.py`.
+2. Al final del archivo, modifica el valor en `run_prueba(X)` según la tabla:
+
+| Código | Descripción de la Prueba | Complejidad Esperada |
+| ------ | ------------------------ | -------------------- |
+| 1      | Ranking global           | (O(N \log N))        |
+| 2      | Promedios (Lineal)       | (O(N))               |
+| 3      | Sedes                    | (O(K \log K))        |
+| 4      | Jugador extremo          | Eficiente ((~O(1)))  |
+| 5      | Equipos por sede         | (O(M \log M))        |
+
+3. Ejecuta el test:
+
+```bash
+python TimeTest.py
+```
 
 ## ✒️ Autores
 
