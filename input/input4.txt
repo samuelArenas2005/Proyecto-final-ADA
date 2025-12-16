@@ -1,0 +1,16 @@
+j1 = SportsMan(1, "Diego Ramirez", 19, 45)
+j2 = SportsMan(2, "Paola Silva", 22, 67)
+j3 = SportsMan(3, "Roberto Mendez", 25, 38)
+j4 = SportsMan(4, "Carmen Vega", 20, 72)
+j5 = SportsMan(5, "Fernando Cruz", 23, 55)
+j6 = SportsMan(6, "Andrea Morales", 21, 61)
+j7 = SportsMan(7, "Ricardo Jimenez", 24, 49)
+j8 = SportsMan(8, "Monica Rojas", 26, 83)
+
+e1 = Team("Futbol", [j1, j2, j3])
+e2 = Team("Volleyball", [j4, j5])
+e3 = Team("Basketball", [j6, j7, j8])
+
+s1 = Site("Sede Bogota", [e1, e2])
+s2 = Site("Sede Barranquilla", [e3])
+

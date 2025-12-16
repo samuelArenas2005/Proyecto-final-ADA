@@ -1,0 +1,72 @@
+
+======================================================================
+ID    Nombre                         Edad     Rendimiento
+======================================================================
+1     Valentina Escobar              19       76        
+2     Santiago Alvarez               28       40        
+3     Manuela Betancur               20       68        
+4     Juan Pablo Mejia               25       51        
+14    Andres Quintero                25       58        
+15    Diana Londono                  20       66        
+16    Carlos Cardona                 29       42        
+24    Camilo Henao                   28       57        
+25    Claudia Zapata                 21       64        
+26    Fabian Betancur                25       45        
+27    Lorena Ochoa                   20       78        
+34    Sergio Escobar                 21       41        
+35    Alejandra Alvarez              25       74        
+5     Isabella Cardenas              22       84        
+6     Nicolas Restrepo               23       37        
+7     Mariana Velasquez              18       79        
+8     Daniel Estrada                 26       55        
+17    Paola Uribe                    23       77        
+18    Felipe Botero                  21       49        
+19    Natalia Mejia                  18       85        
+20    Jorge Castano                  26       54        
+28    Jhonatan Jaramillo             23       52        
+29    Sandra Londoño                 27       69        
+30    Gustavo Salazar                19       35        
+31    Angela Gomez                   24       83        
+9     Sofia Arango                   21       62        
+10    Mateo Zapata                   24       46        
+11    Camila Henao                   19       81        
+12    Sebastian Giraldo              27       33        
+13    Laura Tobon                    22       71        
+21    Adriana Giraldo                24       70        
+22    Leonardo Osorio                22       38        
+23    Yessica Arango                 19       82        
+32    Mauricio Velez                 22       50        
+33    Catalina Marin                 26       67        
+======================================================================
+
+=== RESULTADOS===
+Sede Sede Cali (58.145833333333336):
+	Tennis (55.333333333333336): [16, 14, 15]
+	Swimming (57.5): [34, 35]
+	Futbol (58.75): [2, 4, 3, 1]
+	Volleyball (61.0): [26, 24, 25, 27]
+
+Sede Sede Bogota (60.144444444444446):
+	Tennis (58.5): [32, 33]
+	Basketball (58.6): [12, 10, 9, 13, 11]
+	Futbol (63.333333333333336): [22, 21, 23]
+
+Sede Sede Medellin (63.25):
+	Basketball (59.75): [30, 28, 29, 31]
+	Volleyball (63.75): [6, 8, 7, 5]
+	Swimming (66.25): [18, 20, 17, 19]
+
+
+Ranking Jugadores por ids:
+[12, 30, 6, 22, 2, 34, 16, 26, 10, 18, 32, 4, 28, 20, 8, 24, 14, 9, 25, 15, 33, 3, 29, 21, 13, 35, 1, 17, 27, 7, 11, 23, 31, 5, 19]
+
+Consultas Solicitadas:
+
+Equipo con mayor rendimiento: Swimming de Sede Medellin.
+Equipo con menor rendimiento: Tennis de Sede Cali.
+Jugador con mayor rendimiento: {19, Natalia Mejia, 85}.
+Jugador con menor rendimiento: {12, Sebastian Giraldo, 33}.
+Jugador más joven: {7, Mariana Velasquez, 18}.
+Jugador más veterano: {16, Carlos Cardona, 29}.
+Promedio de edad de los jugadores: 22.91
+Promedio del rendimiento de los jugadores: 60.54
