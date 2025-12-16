@@ -2,6 +2,7 @@ import sys
 from pathlib import Path
 import time
 import matplotlib.pyplot as plt
+import math
 import numpy as np
 
 PROJECT_ROOT = Path(__file__).resolve().parents[2]
@@ -9,193 +10,280 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from SegundaImplementacion.Models import List_of_Sites
-
 from TestGenerate import (
     generacionPruebasJugadoresBase,
     generacionPruebasSede
 )
 
+# =============================================================================
+# SECCIÓN 1: CONFIGURACIÓN DE VARIABLES DE PRUEBA
+# =============================================================================
+# Esta sección es el "Panel de Control" de tus experimentos.
+# Aquí defines los escenarios exactos que se van a simular.
+#
+# FORMATO DE LA TUPLA DE CONFIGURACIÓN:
+# (
+#   0: Total de Jugadores (N),
+#   1: Mínimo de jugadores por equipo,
+#   2: Máximo de jugadores por equipo,
+#   3: Mínimo de equipos por sede,
+#   4: Máximo de equipos por sede,
+#   5: Total de Sedes (K)
+# )
+# =============================================================================
+
+# --- ESCENARIO A: PRUEBA DE ESTRÉS POR CANTIDAD DE SEDES ---
+# OBJETIVO: Evaluar cómo se comporta el sistema cuando N (50,000) es constante,
+# pero se distribuye en muchas sedes pequeñas vs pocas sedes grandes.
+#
+# QUÉ MODIFICAR:
+# - Mantén el primer número (50000) fijo.
+# - Cambia el ÚLTIMO número (10, 50, 100...) para variar las sedes.
+# - Ajusta los rangos de equipos (posiciones 3 y 4) para que los datos quepan.
+tamanosCambiandoSedes = [
+    # (Total, MinJug, MaxJug, MinEq, MaxEq, SEDES)
+    (50000, 10, 20, 10, 30, 10), 
+    (50000, 10, 20, 10, 30, 50),
+    (50000, 5, 15, 5, 15, 100),
+    (50000, 4, 10, 4, 10, 500),
+    (50000, 4, 6, 8, 12, 1000) 
+]
+# Eje X de la gráfica para este escenario:
+referenciaCambioSedes = [10, 50, 100, 500, 1000]
+
+# --- ESCENARIO B: PRUEBA DE DENSIDAD DE EQUIPOS ---
+# OBJETIVO: Evaluar si tener sedes con MUCHOS equipos afecta el rendimiento.
+#
+# QUÉ MODIFICAR:
+# - Mantén Jugadores (50000) y Sedes (50) fijos.
+# - Aumenta progresivamente los valores de EQUIPOS POR SEDE (posiciones 3 y 4).
+#   Ejemplo: De (2, 5) pasa a (80, 100).
+tamanosCambiandoEquipos = [
+    (50000, 10, 20, 2, 5, 50),
+    (50000, 10, 20, 10, 20, 50),
+    (50000, 10, 20, 30, 40, 50),
+    (50000, 10, 20, 50, 60, 50),
+    (50000, 10, 20, 80, 100, 50)
+]
+# Eje X de la gráfica (Promedio de equipos):
+referenciaCambioEquipos = [3, 15, 35, 55, 90]
+
+# --- ESCENARIO C: PRUEBA DE CRECIMIENTO DE JUGADORES (N) ---
+# OBJETIVO: La prueba clásica de complejidad asintótica (O(N) o O(N log N)).
+# Ver cómo escala el tiempo al aumentar masivamente los datos.
+#
+# QUÉ MODIFICAR:
+# - Aumenta el PRIMER número (Total Jugadores) exponencialmente (100 -> 200,000).
+# - Aumenta proporcionalmente el número de sedes (último número) para evitar
+#   que una sola sede colapse con demasiados datos.
+tamanosCambiandoJugadores = [
+    (100, 2, 5, 2, 4, 2),
+    (1000, 5, 10, 2, 5, 5),
+    (5000, 10, 20, 5, 10, 10),
+    (10000, 10, 30, 5, 10, 15),
+    (50000, 15, 40, 10, 20, 20),
+    (100000, 20, 50, 10, 20, 30),
+    (200000, 20, 50, 15, 25, 40)
+]
+# Eje X de la gráfica (Cantidad de Jugadores):
+referenciaCambioJugadores = [100, 1000, 5000, 10000, 50000, 100000, 200000]
+
+
+# =============================================================================
+# SECCIÓN 2: MOTORES DE MEDICIÓN
+# =============================================================================
+
 def medir_tiempo(algoritmo): 
+    """Cronómetro de alta precisión que ejecuta la función recibida."""
     inicio = time.perf_counter()
     algoritmo()
     fin = time.perf_counter()
     return fin - inicio
 
-def preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    """Genera jugadores y calcula número de sedes necesarias"""
+def preparar_datos_con_tupla(params):
+    """
+    Traduce la tupla de configuración en estructuras de datos reales.
+    Utiliza los generadores aleatorios definidos en TestGenerate.py.
+    """
+    n, min_j, max_j, min_eq, max_eq, num_sedes = params
     jugadores = generacionPruebasJugadoresBase(n)
-    promedio_jug_equipo = (min_jug_equipo + max_jug_equipo) / 2
-    promedio_eq_sede = (min_eq_sede + max_eq_sede) / 2
-    num_sedes = int(n / (promedio_jug_equipo * promedio_eq_sede) * 1.1) + 1
-    return jugadores, num_sedes
+    lista_sedes = generacionPruebasSede(jugadores, min_j, max_j, min_eq, max_eq, num_sedes)
+    return lista_sedes
 
-def pruebaOrganizarEstructuraDeDatos(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
+
+# =============================================================================
+# SECCIÓN 3: ENVOLTORIOS DE PRUEBAS (WRAPPERS)
+# =============================================================================
+# Estas funciones aíslan la generación de datos de la medición del algoritmo.
+# 1. Primero crean los datos (preparar_datos_con_tupla) SIN medir tiempo.
+# 2. Luego definen una función interna 'prueba' que solo ejecuta el algoritmo.
+# 3. Finalmente cronometran solo la función interna.
+
+def pruebaOrganizarEstructuraDeDatos(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     
     def prueba():
-        lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
+        # Algoritmo a medir: Ordenamiento interno de Sedes y Equipos
         lista_sedes.get_structure_by_performance(show=False)
     
     return medir_tiempo(prueba)
 
-def pruebaRankingGlobal(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
-    lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
+def pruebaRankingGlobal(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     
     def prueba():
+        # Algoritmo a medir: Ranking Global (Merge Sort N log N)
         lista_sedes.get_global_ranking(show=False)
     
     return medir_tiempo(prueba)
 
-def pruebaEdadesExtremas(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
-    lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
-    
+def pruebaEdadesExtremas(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     def prueba():
+        # Algoritmo a medir: Búsqueda del más joven (Lineal o Logarítmica)
         lista_sedes.get_youngest_player_across_Sites()
-    
     return medir_tiempo(prueba)
 
-def pruebaEdadPromedio(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
-    lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
-    
+def pruebaEdadPromedio(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     def prueba():
+        # Algoritmo a medir: Promedio (Recorrido Lineal O(N))
         lista_sedes.get_average_age_across_Sites()
-    
     return medir_tiempo(prueba)
 
-def pruebaRendimientoPromedio(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
-    lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
-    
+def pruebaRendimientoPromedio(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     def prueba():
         lista_sedes.get_average_performance_across_Sites()
-    
     return medir_tiempo(prueba)
 
-def pruebaEquiposExtremos(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
-    lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
-    
+def pruebaEquiposExtremos(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     def prueba():
         lista_sedes.get_best_team_across_Sites()
-    
     return medir_tiempo(prueba)
 
-def pruebaJugadoresExtremos(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    jugadores, num_sedes = preparar_datos_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
-    lista_sedes = generacionPruebasSede(jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede, num_sedes)
-    
+def pruebaJugadoresExtremos(params):
+    lista_sedes = preparar_datos_con_tupla(params)
     def prueba():
         lista_sedes.get_best_player_across_Sites()
-    
     return medir_tiempo(prueba)
 
-def ejecutar_bateria_de_pruebas(funcion_prueba, cantidades_jugadores, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede):
-    """Ejecuta una batería de pruebas y retorna lista de tiempos"""
+
+# =============================================================================
+# SECCIÓN 4: EJECUCIÓN Y VISUALIZACIÓN
+# =============================================================================
+
+def ejecutar_bateria_de_pruebas(funcion_prueba, lista_tuplas):
+    """Itera sobre la lista de escenarios y guarda los tiempos reales."""
     tiempos = []
-    for n in cantidades_jugadores:
-        tiempo = funcion_prueba(n, min_jug_equipo, max_jug_equipo, min_eq_sede, max_eq_sede)
+    print(f"Iniciando pruebas ({len(lista_tuplas)} escenarios)...")
+    for params in lista_tuplas:
+        tiempo = funcion_prueba(params)
         tiempos.append(tiempo)
+        print(f"  -> Escenario completado: {tiempo:.5f} s")
     return tiempos
 
-# Configuración de las pruebas
-CANTIDADES_JUGADORES = [100, 1000, 2000, 5000, 100000, 200000, 400000, 500000]
-
-def graficar_resultados(cantidades, tiempos, titulo, color='blue'):
-    """Genera gráfico de tiempos vs cantidad de jugadores"""
+def graficar_resultados(eje_x, tiempos_reales, tiempos_teoricos, titulo, label_x):
+    """
+    Genera la gráfica comparativa.
+    - Azul: Tiempo Real medido por tu PC.
+    - Roja (Punteada): Proyección matemática ideal.
+    """
     plt.figure(figsize=(10, 6))
-    plt.plot(cantidades, tiempos, 'o-', label='Tiempo Real', color=color)
-    plt.xlabel('Cantidad de jugadores')
+    
+    plt.plot(eje_x, tiempos_reales, 'o-', label='Tiempo Real', color='blue')
+    
+    if tiempos_teoricos:
+        plt.plot(eje_x, tiempos_teoricos, '--', label='Complejidad Teórica', color='red')
+    
+    plt.xlabel(label_x)
     plt.ylabel('Tiempo (segundos)')
     plt.title(titulo)
     plt.legend()
     plt.grid(True)
     plt.show()
 
-#---------------PRUEBAS DISPONIBLES----------------------
-# 1 - Organizar estructura de datos (ordenar sedes y equipos por rendimiento)
-# 2 - Ranking global de jugadores
-# 3 - Edades extremas (usa el más joven)
-# 4 - Edad promedio
-# 5 - Rendimiento promedio
-# 6 - Equipos extremos (usa el mejor)
-# 7 - Jugadores extremos (usa el mejor)
-
-def prueba_organizar_estructura():
-    """Prueba 1: Organizar estructura de datos"""
-    print("\n=== Prueba 1: Organizar Estructura de Datos ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaOrganizarEstructuraDeDatos, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Organizar Estructura de Datos', 'green')
-    return tiempos
-
-def prueba_ranking_global():
-    """Prueba 2: Ranking global de jugadores"""
-    print("\n=== Prueba 2: Ranking Global de Jugadores ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaRankingGlobal, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Ranking Global de Jugadores', 'blue')
-    return tiempos
-
-def prueba_edades_extremas():
-    """Prueba 3: Edades extremas (usa el caso del jugador más joven)"""
-    print("\n=== Prueba 3: Edades Extremas ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaEdadesExtremas, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Consulta: Edades Extremas (Más Joven)', 'orange')
-    return tiempos
-
-def prueba_edad_promedio():
-    """Prueba 4: Edad promedio"""
-    print("\n=== Prueba 4: Edad Promedio ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaEdadPromedio, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Consulta: Edad Promedio', 'red')
-    return tiempos
-
-def prueba_rendimiento_promedio():
-    """Prueba 5: Rendimiento promedio"""
-    print("\n=== Prueba 5: Rendimiento Promedio ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaRendimientoPromedio, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Consulta: Rendimiento Promedio', 'cyan')
-    return tiempos
-
-def prueba_equipos_extremos():
-    """Prueba 6: Equipos extremos (usa el caso del mejor equipo)"""
-    print("\n=== Prueba 6: Equipos Extremos ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaEquiposExtremos, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Consulta: Equipos Extremos (Mejor)', 'magenta')
-    return tiempos
-
-def prueba_jugadores_extremos():
-    """Prueba 7: Jugadores extremos (usa el caso del mejor jugador)"""
-    print("\n=== Prueba 7: Jugadores Extremos ===")
-    tiempos = ejecutar_bateria_de_pruebas(pruebaJugadoresExtremos, CANTIDADES_JUGADORES, 10, 100, 10, 100)
-    print("Tiempos:", tiempos)
-    graficar_resultados(CANTIDADES_JUGADORES, tiempos, 'Consulta: Jugadores Extremos (Mejor)', 'lime')
-    return tiempos
+# CONSTANTES DE CALIBRACIÓN (K)
+# Estas variables ajustan la altura de la curva teórica (roja) para que
+# coincida visualmente con la curva real (azul). Dependen de la velocidad de tu CPU.
+# Si la línea roja sale muy arriba o muy abajo, modifica estos valores.
+K_NLOGN = 0.00000008  # Para algoritmos O(N log N)
+K_N = 0.0000005       # Para algoritmos Lineales O(N)
+K_SEDES = 0.00002      # Para algoritmos dependientes de Sedes
+K_EQUIPOS = 0.001    # Para algoritmos dependientes de Equipos
 
 def run_prueba(numero):
-    """Ejecuta la prueba indicada por número"""
+    """
+    SELECTOR PRINCIPAL DE PRUEBAS
+    Cambia el número en 'if __name__ == "__main__":' para ejecutar:
+    
+    1: RANKING GLOBAL (Variable N)
+       - Prueba la complejidad N log N.
+       - Usa la lista 'tamanosCambiandoJugadores'.
+       
+    2: CONSULTAS LINEALES (Variable N)
+       - Prueba cálculos de promedios O(N).
+       - Usa la lista 'tamanosCambiandoJugadores'.
+       
+    3: ESTRUCTURA VS SEDES (Variable K)
+       - Prueba el impacto de tener muchas Sedes.
+       - Usa la lista 'tamanosCambiandoSedes'.
+       
+    4: BÚSQUEDA EXTREMA (Variable N)
+       - Busca el mejor/peor jugador.
+       - Usa la lista 'tamanosCambiandoJugadores'.
+       
+    5: ESTRUCTURA VS EQUIPOS (Variable M)
+       - Prueba el impacto de tener sedes muy densas (muchos equipos).
+       - Usa la lista 'tamanosCambiandoEquipos'.
+    """
+    
     if numero == 1:
-        prueba_organizar_estructura()
-    elif numero == 2:
-        prueba_ranking_global()
-    elif numero == 3:
-        prueba_edades_extremas()
-    elif numero == 4:
-        prueba_edad_promedio()
-    elif numero == 5:
-        prueba_rendimiento_promedio()
-    elif numero == 6:
-        prueba_equipos_extremos()
-    elif numero == 7:
-        prueba_jugadores_extremos()
-    else:
-        print(f"Prueba {numero} no definida. Revisa la tabla de pruebas disponibles.")
+        print("\n=== Prueba 1: Ranking Global (Teórica: N log N) ===")
+        tiempos = ejecutar_bateria_de_pruebas(pruebaRankingGlobal, tamanosCambiandoJugadores)
+        teorica = [K_NLOGN * n * math.log2(n) for n in referenciaCambioJugadores]
+        graficar_resultados(referenciaCambioJugadores, tiempos, teorica, 
+                            'Ranking Global vs N', 'Cantidad de Jugadores')
 
-run_prueba(7)
+    elif numero == 2:
+        print("\n=== Prueba 2: Consultas Lineales (Teórica: O(n)) ===")
+        tiempos = ejecutar_bateria_de_pruebas(pruebaEdadPromedio, tamanosCambiandoJugadores)
+        teorica = [K_N * n for n in referenciaCambioJugadores]
+        graficar_resultados(referenciaCambioJugadores, tiempos, teorica, 
+                            'Consulta Promedio vs N', 'Cantidad de Jugadores')
+
+    elif numero == 3:
+        print("\n=== Prueba 3: Organizar Estructura vs Cantidad de Sedes ===")
+        tiempos = ejecutar_bateria_de_pruebas(pruebaOrganizarEstructuraDeDatos, tamanosCambiandoSedes)
+        teorica = [K_SEDES * k * math.log2(k) for k in referenciaCambioSedes]
+        graficar_resultados(referenciaCambioSedes, tiempos, teorica, 
+                            'Organizar Estructura vs Número de Sedes', 'Cantidad de Sedes')
+        
+    elif numero == 4:
+        print("\n=== Prueba 4: Jugadores Extremos (Lineal) ===")
+        tiempos = ejecutar_bateria_de_pruebas(pruebaJugadoresExtremos, tamanosCambiandoJugadores)
+        teorica = [K_N * n for n in referenciaCambioJugadores]
+        graficar_resultados(referenciaCambioJugadores, tiempos, teorica, 
+                            'Jugador Extremo vs N', 'Cantidad de Jugadores')
+
+    elif numero == 5:
+        print("\n=== Prueba 5: Organizar Estructura vs Equipos por Sede ===")
+        tiempos = ejecutar_bateria_de_pruebas(pruebaOrganizarEstructuraDeDatos, tamanosCambiandoEquipos)
+        # Teórica aproximada: M * log(M)
+        teorica = [K_EQUIPOS * m * (math.log2(m) if m > 0 else 1) for m in referenciaCambioEquipos]
+        graficar_resultados(referenciaCambioEquipos, tiempos, teorica, 
+                            'Organizar Estructura vs Equipos por Sede', 'Promedio Equipos por Sede')
+
+    else:
+        print("Opción no válida. Por favor elija un número del 1 al 5.")
+
+# =============================================================================
+# PUNTO DE ENTRADA
+# =============================================================================
+if __name__ == "__main__":
+    # INSTRUCCIONES PARA EJECUTAR:
+    # Cambia el número dentro de run_prueba() para seleccionar qué gráfica generar.
+    # Ejemplo: run_prueba(1) generará la gráfica de N log N.
+    
+    run_prueba(5)

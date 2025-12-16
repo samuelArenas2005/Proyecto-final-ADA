@@ -1,5 +1,6 @@
 from pathlib import Path
 from SegundaImplementacion.buildOutput import generate_output as generate_output_second_implementation
+from PrimeraImplementacion.buildOutput import generate_output as generate_output_first_implementation
 from importlib import import_module
 
 PROJECT_ROOT = Path(__file__).resolve().parent
@@ -22,9 +23,7 @@ def main() -> None:
     if IMPLEMENTATION == "red_&_black_tree":
         generate_output_second_implementation(input_path=input_path, output_path=OUTPUT_FILE)
     elif IMPLEMENTATION == "array":
-        # Importar dinámicamente la primera implementación
-        primera_impl = import_module("PrimeraImplementacion.buildOutput")
-        primera_impl.generate_output(input_path=input_path, output_path=OUTPUT_FILE)
+        generate_output_first_implementation(input_path=input_path, output_path=OUTPUT_FILE)
     else:
         raise ValueError(
             f"Implementación no válida: {IMPLEMENTATION}. Usa 'array' o 'red_&_black_tree'"
