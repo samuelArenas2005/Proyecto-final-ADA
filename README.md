@@ -81,10 +81,6 @@ source venv/bin/activate
 ```bash
 pip install matplotlib numpy
 ```
-### 📚Instalar la librería matplotlib
-```bash
-pip install matplotlib
-```
 ---
 ## 🚀 Ejecución del Programa
 
